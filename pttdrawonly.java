@@ -89,7 +89,7 @@ public class pttdrawonly {
 				else if (pitch[i]==12 || pitch[i]==14 || pitch[i]==15 || pitch[i]==17 || pitch[i]==19 || 
 						pitch[i]==20 || pitch[i]==22){
 					notePic="quarternotedown.png";
-					for(int b=-30;b<=(-30+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(start-5+dist*(i%15), b, start+5+dist*(i%15), b);
+					for(int b=-30;b<=(-25+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(start-5+dist*(i%15), b, start+5+dist*(i%15), b);
 					StdDraw.picture(start+dist*(i%15), -42.5-5+17.5+2.5*notePos[pitch[i]], notePic,8,14);
 				}
 				else if (pitch[i]==4 || pitch[i]==6 || pitch[i]==9 || pitch[i]==11){
@@ -99,9 +99,9 @@ public class pttdrawonly {
 				}
 				else if (pitch[i]==13 || pitch[i]==16 || pitch[i]==18 || pitch[i]==21 || pitch[i]==23){
 					notePic="quarternotedown.png";
-					for(int b=-30;b<=(-30+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(start-5+dist*(i%15), b, start+5+dist*(i%15), b);
-					StdDraw.text(start-4+dist*(i%15), -43+17.5+2.5*notePos[pitch[i]+1], "\u0023");
-					StdDraw.picture(start+.5+dist*(i%15), -42.5+10+2.5*notePos[pitch[i]], notePic,8,14);
+					for(int b=-30;b<=(-25+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(start-5+dist*(i%15), b, start+5+dist*(i%15), b);
+					StdDraw.text(start-4+dist*(i%15), -43+17.5+2.5*notePos[pitch[i]], "\u0023");
+					StdDraw.picture(start+.5+dist*(i%15), -42.5-5+17.5+2.5*notePos[pitch[i]], notePic,8,14);
 				}
 			}
 			
@@ -124,7 +124,7 @@ public class pttdrawonly {
 				else if (pitch[i]==12 || pitch[i]==14 || pitch[i]==15 || pitch[i]==17 || pitch[i]==19 || 
 						pitch[i]==20 || pitch[i]==22){
 					notePic="quarternotedown.png";
-					for(int b=-75;b<=(-75+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(start-5+dist*(i%15), b, start+5+dist*(i%15), b);
+					for(int b=-75;b<=(-70+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(start-5+dist*(i%15), b, start+5+dist*(i%15), b);
 					StdDraw.picture(start+dist*(i%15), -42.5-5+17.5-topBotDiff+2.5*notePos[pitch[i]], notePic,8,14);
 				}
 				else if (pitch[i]==4 || pitch[i]==6 || pitch[i]==9 || pitch[i]==11){
@@ -134,7 +134,7 @@ public class pttdrawonly {
 				}
 				else if (pitch[i]==13 || pitch[i]==16 || pitch[i]==18 || pitch[i]==21 || pitch[i]==23){
 					notePic="quarternotedown.png";
-					for(int b=-75;b<=(-75+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(start-5+dist*(i%15), b, start+5+dist*(i%15), b);
+					for(int b=-75;b<=(-70+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(start-5+dist*(i%15), b, start+5+dist*(i%15), b);
 					StdDraw.text(start-4+dist*(i%15), -43+17.5-topBotDiff+2.5*notePos[pitch[i]], "\u0023");
 					StdDraw.picture(start+.5+dist*(i%15), -42.5-5+17.5-topBotDiff+2.5*notePos[pitch[i]], notePic,8,14);
 				}
