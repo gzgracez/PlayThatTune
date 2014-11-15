@@ -69,6 +69,7 @@ public class PlayThatTuneDeluxeDeluxe {
 			double[] a = note(pitch, duration);
 			StdAudio.play(a);
 			i++;
+			StdDraw.setCanvasSize(600,900);
 			StdDraw.setXscale(0,200);
 			StdDraw.setYscale(-100,200);
 			StdDraw.setPenColor((int)(duration*100),168+(int)(duration*50),255);
