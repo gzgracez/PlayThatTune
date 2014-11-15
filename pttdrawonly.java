@@ -53,6 +53,10 @@ public class pttdrawonly {
 			StdDraw.setYscale(-100,200);
 			StdDraw.setPenColor((int)(duration[i]*100),168+(int)(duration[i]*50),255);
 			StdDraw.filledSquare(100, 100, 110);
+			if (i%30==0){
+				StdDraw.setPenColor(StdDraw.WHITE); 
+				StdDraw.filledRectangle(100, -55, 100, 45);
+			}
 			StdDraw.setPenColor(StdDraw.BLACK); 
 			StdDraw.line(0, -30, 0, -50);
 			for (int a=-30;a>-55; a-=5){
@@ -69,8 +73,8 @@ public class pttdrawonly {
 				StdDraw.line(0, a, 200, a);
 			}
 			StdDraw.picture(9, -87.5, "treble.png",15,40);
-			
-			if (((start+dist*i)%400)<200){//top
+
+			if (i%30<15){//top
 				if (pitch[i]<2){
 					notePic="quarternote.png";
 					if (pitch[i]==0){
@@ -104,8 +108,8 @@ public class pttdrawonly {
 					StdDraw.picture(start+.5+dist*(i%15), -42.5-5+17.5+2.5*notePos[pitch[i]], notePic,8,14);
 				}
 			}
-			
-			else if (((start+dist*i)%400)<398){//bottom
+
+			else if (i%30<30){//bottom
 				if (pitch[i]<2){
 					notePic="quarternote.png";
 					if (pitch[i]==0){
