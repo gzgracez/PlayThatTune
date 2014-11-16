@@ -64,22 +64,14 @@ public class PlayThatTuneDeluxeDeluxe {
 		// read in pitch-duration pairs from standard input
 		int i=-1;
 		StdDraw.setCanvasSize(600,900);
-<<<<<<< HEAD
-=======
-		StdDraw.setXscale(0,200);
-		StdDraw.setYscale(-100,200);
->>>>>>> FETCH_HEAD
 		while (!StdIn.isEmpty()) {
 			int pitch = StdIn.readInt();
 			double duration = StdIn.readDouble();
 			double[] a = note(pitch, duration);
 			StdAudio.play(a);
 			i++;
-<<<<<<< HEAD
 			StdDraw.setXscale(0,200);
 			StdDraw.setYscale(-100,200);
-=======
->>>>>>> FETCH_HEAD
 			StdDraw.setPenColor((int)(duration*100),168+(int)(duration*50),255);
 			StdDraw.filledSquare(100, 100, 110);
 			if (i%30==0){
