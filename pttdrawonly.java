@@ -14,8 +14,8 @@ public class pttdrawonly {
 		StdDraw.setXscale(0,200);
 		StdDraw.setYscale(-100,200);
 		for (int i=0;i<pitch.length;i++){
-			//double[] a = note(pitch[i], duration[i]);
-			//StdAudio.play(a);
+			double[] a = note(pitch[i], duration[i]);
+			StdAudio.play(a);
 			StdDraw.setPenColor((int)(duration[i]*100),168+(int)(duration[i]*50),255);
 			StdDraw.filledSquare(100, 100, 110);
 			StdDraw.setPenColor(StdDraw.RED); 
