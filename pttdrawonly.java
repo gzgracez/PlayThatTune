@@ -14,26 +14,40 @@ public class pttdrawonly {
 		StdDraw.setXscale(0,200);
 		StdDraw.setYscale(-100,200);
 		for (int i=0;i<pitch.length;i++){
-			double[] a = note(pitch[i], duration[i]);
-			StdAudio.play(a);
-			StdDraw.setPenColor((int)(duration[i]*100),168+(int)(duration[i]*50),255);
+			//double[] a = note(pitch[i], duration[i]);
+			//StdAudio.play(a);
+			StdDraw.setPenColor((int)(map(duration[i],0,2,0,255)),168+(int)(map(duration[i],0.0f,2.0f,0.0f,86.0f)),255);
 			StdDraw.filledSquare(100, 100, 110);
-			StdDraw.setPenColor(StdDraw.RED); 
-			StdDraw.filledCircle(100+50*Math.sin(pitch[i]*10), 100+50*Math.cos(pitch[i]*10), 20);
+			
+			StdDraw.setPenColor(StdDraw.BLACK); 
+			for (int r=40; r<=100; r+=20) StdDraw.circle(100, 100, r);
+			
+			StdDraw.setPenColor(0,(int)map(pitch[i],0,22,100,255),100);
+			StdDraw.circle(100, 100, (map(pitch[i],0,22,50,80)));
+			//StdDraw.setPenColor(StdDraw.RED); 
+			//StdDraw.filledCircle(100+50*Math.cos(pitch[i]*10), 100+50*Math.sin(pitch[i]*10), 20);
+			StdDraw.filledCircle(100+(map(pitch[i],0,22,50,80))*Math.cos(pitch[i]*10), 100+(map(pitch[i],0,22,50,80))*Math.sin(pitch[i]*10), 20);
+			if (Math.cos(pitch[i]*10)>=0) StdDraw.picture(100, 100, "tigerstandright.png");
+			else StdDraw.picture(100, 100, "tigerstandleft.png");
 			drawNotes(i,duration[i],pitch[i]);
 		}
+		StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+		StdDraw.filledSquare(100, 100, 110);
+		StdDraw.setPenColor(StdDraw.BLACK); 
+		for (int r=40; r<=100; r+=20) StdDraw.circle(100, 100, r);
+		StdDraw.picture(100, 100, "tigerwaving.png");
 		StdDraw.show(); 
 
 		// needed to terminate program - known Java bug
 		System.exit(0);
 	} 
 
-	public static float map(float num, float cmin, float cmax, float nmin, float nmax){
-		float prop=(num-cmin)/(cmax-cmin);
-		float newProp=nmin+(prop*(nmax-nmin));
+	public static double map(double num, double cmin, double cmax, double nmin, double nmax){
+		double prop=(num-cmin)/(cmax-cmin);
+		double newProp=nmin+(prop*(nmax-nmin));
 		return newProp;
 	}
-	
+
 	public static void drawNotes(int i, double duration, int pitch){
 		Integer notePos[]={0,0,1,2,2,3,3,4,5,5,6,6,0,0,1,2,2,3,3,4,5,5,6};//23, 0-22
 		int startX=25;
@@ -41,7 +55,7 @@ public class pttdrawonly {
 		int topBotDiff=45;
 		int dist=12;
 		String notePic="quarternote.png";
-		
+
 		if (i%30==0){
 			StdDraw.setPenColor(StdDraw.WHITE); 
 			StdDraw.filledRectangle(100, startY-12.5, 100, 45);
@@ -133,10 +147,10 @@ public class pttdrawonly {
 		//				StdDraw.line(0, a, 200, a);
 		//			}
 		//			StdDraw.picture(10, -85, "bass.png",15,20);
-		StdDraw.show(20); 
+		StdDraw.show(600); 
 		map(2,1,3,1,10);
 	}
-	
+
 	// take weighted sum of two arrays
 	public static double[] sum(double[] a, double[] b, double awt, double bwt) {
 
