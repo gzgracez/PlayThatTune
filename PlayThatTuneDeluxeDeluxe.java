@@ -63,13 +63,13 @@ public class PlayThatTuneDeluxeDeluxe {
 		Integer notePos[]={0,0,1,2,2,3,3,4,5,5,6,6,0,0,1,2,2,3,3,4,5,5,6};//23, 0-22
 		// read in pitch-duration pairs from standard input
 		int i=-1;
+		StdDraw.setCanvasSize(600,900);
 		while (!StdIn.isEmpty()) {
 			int pitch = StdIn.readInt();
 			double duration = StdIn.readDouble();
 			double[] a = note(pitch, duration);
 			StdAudio.play(a);
 			i++;
-			StdDraw.setCanvasSize(600,900);
 			StdDraw.setXscale(0,200);
 			StdDraw.setYscale(-100,200);
 			StdDraw.setPenColor((int)(duration*100),168+(int)(duration*50),255);

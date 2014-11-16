@@ -46,11 +46,16 @@ public class pttdrawonly {
 		//System.out.println(pitch1);
 		// read in pitch-duration pairs from standard input
 		StdDraw.setCanvasSize(600,900);
+		StdDraw.setXscale(0,200);
+		StdDraw.setYscale(-100,200);
+		int dist=12;
+		int startX=25;
+		int topBotDiff=45;
+		String notePic="quarternote.png";
+		int startY=0;
 		for (int i=0;i<pitch.length;i++){
 			//double[] a = note(pitch[i], duration[i]);
 			//StdAudio.play(a);
-			StdDraw.setXscale(0,200);
-			StdDraw.setYscale(-100,200);
 			StdDraw.setPenColor((int)(duration[i]*100),168+(int)(duration[i]*50),255);
 			StdDraw.filledSquare(100, 100, 110);
 			if (i%30==0){
@@ -62,10 +67,6 @@ public class pttdrawonly {
 			for (int a=-30;a>-55; a-=5){
 				StdDraw.line(0, a, 200, a);
 			}
-			int dist=12;
-			int start=25;
-			int topBotDiff=45;
-			String notePic="quarternote.png";
 			StdDraw.picture(9, -42.5, "treble.png",15,40);
 
 			StdDraw.line(0, -75, 0, -95);
@@ -78,34 +79,34 @@ public class pttdrawonly {
 				if (pitch[i]<2){
 					notePic="quarternote.png";
 					if (pitch[i]==0){
-						StdDraw.picture(start+dist*(i%15), -42.5+5, notePic,8,14);
+						StdDraw.picture(startX+dist*(i%15), -42.5+5, notePic,8,14);
 					}
 					else if (pitch[i]==1){
-						StdDraw.text(start-4+dist*(i%15), -43, "\u0023");
-						StdDraw.picture(start+.5+dist*(i%15), -42.5+5, notePic,8,14);
+						StdDraw.text(startX-4+dist*(i%15), -43, "\u0023");
+						StdDraw.picture(startX+.5+dist*(i%15), -42.5+5, notePic,8,14);
 					}
 				}
 				else if (pitch[i]==2 || pitch[i]==3 || pitch[i]==5 || pitch[i]==7 || 
 						pitch[i]==8 || pitch[i]==10){
 					notePic="quarternotedown.png";
-					StdDraw.picture(start+dist*(i%15), -42.5-5+2.5*notePos[pitch[i]], notePic,8,14);
+					StdDraw.picture(startX+dist*(i%15), -42.5-5+2.5*notePos[pitch[i]], notePic,8,14);
 				}
 				else if (pitch[i]==12 || pitch[i]==14 || pitch[i]==15 || pitch[i]==17 || pitch[i]==19 || 
 						pitch[i]==20 || pitch[i]==22){
 					notePic="quarternotedown.png";
-					for(int b=-30;b<=(-25+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(start-5+dist*(i%15), b, start+5+dist*(i%15), b);
-					StdDraw.picture(start+dist*(i%15), -42.5-5+17.5+2.5*notePos[pitch[i]], notePic,8,14);
+					for(int b=-30;b<=(-25+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+					StdDraw.picture(startX+dist*(i%15), -42.5-5+17.5+2.5*notePos[pitch[i]], notePic,8,14);
 				}
 				else if (pitch[i]==4 || pitch[i]==6 || pitch[i]==9 || pitch[i]==11){
 					notePic="quarternotedown.png";
-					StdDraw.text(start-4+dist*(i%15), -43+2.5*notePos[pitch[i]], "\u0023");
-					StdDraw.picture(start+.5+dist*(i%15), -42.5-5+2.5*notePos[pitch[i]], notePic,8,14);
+					StdDraw.text(startX-4+dist*(i%15), -43+2.5*notePos[pitch[i]], "\u0023");
+					StdDraw.picture(startX+.5+dist*(i%15), -42.5-5+2.5*notePos[pitch[i]], notePic,8,14);
 				}
 				else if (pitch[i]==13 || pitch[i]==16 || pitch[i]==18 || pitch[i]==21 || pitch[i]==23){
 					notePic="quarternotedown.png";
-					for(int b=-30;b<=(-25+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(start-5+dist*(i%15), b, start+5+dist*(i%15), b);
-					StdDraw.text(start-4+dist*(i%15), -43+17.5+2.5*notePos[pitch[i]], "\u0023");
-					StdDraw.picture(start+.5+dist*(i%15), -42.5-5+17.5+2.5*notePos[pitch[i]], notePic,8,14);
+					for(int b=-30;b<=(-25+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+					StdDraw.text(startX-4+dist*(i%15), -43+17.5+2.5*notePos[pitch[i]], "\u0023");
+					StdDraw.picture(startX+.5+dist*(i%15), -42.5-5+17.5+2.5*notePos[pitch[i]], notePic,8,14);
 				}
 			}
 
@@ -113,34 +114,34 @@ public class pttdrawonly {
 				if (pitch[i]<2){
 					notePic="quarternote.png";
 					if (pitch[i]==0){
-						StdDraw.picture(start+dist*(i%15), -42.5-topBotDiff+5, notePic,8,14);
+						StdDraw.picture(startX+dist*(i%15), -42.5-topBotDiff+5, notePic,8,14);
 					}
 					else if (pitch[i]==1){
-						StdDraw.text(start-4+dist*(i%15), -43-topBotDiff, "\u0023");
-						StdDraw.picture(start+.5+dist*(i%15), -42.5-topBotDiff+5, notePic,8,14);
+						StdDraw.text(startX-4+dist*(i%15), -43-topBotDiff, "\u0023");
+						StdDraw.picture(startX+.5+dist*(i%15), -42.5-topBotDiff+5, notePic,8,14);
 					}
 				}
 				else if (pitch[i]==2 || pitch[i]==3 || pitch[i]==5 || pitch[i]==7 || 
 						pitch[i]==8 || pitch[i]==10){
 					notePic="quarternotedown.png";
-					StdDraw.picture(start+dist*(i%15), -42.5-5-topBotDiff+2.5*notePos[pitch[i]], notePic,8,14);
+					StdDraw.picture(startX+dist*(i%15), -42.5-5-topBotDiff+2.5*notePos[pitch[i]], notePic,8,14);
 				}
 				else if (pitch[i]==12 || pitch[i]==14 || pitch[i]==15 || pitch[i]==17 || pitch[i]==19 || 
 						pitch[i]==20 || pitch[i]==22){
 					notePic="quarternotedown.png";
-					for(int b=-75;b<=(-70+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(start-5+dist*(i%15), b, start+5+dist*(i%15), b);
-					StdDraw.picture(start+dist*(i%15), -42.5-5+17.5-topBotDiff+2.5*notePos[pitch[i]], notePic,8,14);
+					for(int b=-75;b<=(-70+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+					StdDraw.picture(startX+dist*(i%15), -42.5-5+17.5-topBotDiff+2.5*notePos[pitch[i]], notePic,8,14);
 				}
 				else if (pitch[i]==4 || pitch[i]==6 || pitch[i]==9 || pitch[i]==11){
 					notePic="quarternotedown.png";
-					StdDraw.text(start-4+dist*(i%15), -43-topBotDiff+2.5*notePos[pitch[i]], "\u0023");
-					StdDraw.picture(start+.5+dist*(i%15), -42.5-5-topBotDiff+2.5*notePos[pitch[i]], notePic,8,14);
+					StdDraw.text(startX-4+dist*(i%15), -43-topBotDiff+2.5*notePos[pitch[i]], "\u0023");
+					StdDraw.picture(startX+.5+dist*(i%15), -42.5-5-topBotDiff+2.5*notePos[pitch[i]], notePic,8,14);
 				}
 				else if (pitch[i]==13 || pitch[i]==16 || pitch[i]==18 || pitch[i]==21 || pitch[i]==23){
 					notePic="quarternotedown.png";
-					for(int b=-75;b<=(-70+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(start-5+dist*(i%15), b, start+5+dist*(i%15), b);
-					StdDraw.text(start-4+dist*(i%15), -43+17.5-topBotDiff+2.5*notePos[pitch[i]], "\u0023");
-					StdDraw.picture(start+.5+dist*(i%15), -42.5-5+17.5-topBotDiff+2.5*notePos[pitch[i]], notePic,8,14);
+					for(int b=-75;b<=(-70+2.5*(notePos[pitch[i]-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+					StdDraw.text(startX-4+dist*(i%15), -43+17.5-topBotDiff+2.5*notePos[pitch[i]], "\u0023");
+					StdDraw.picture(startX+.5+dist*(i%15), -42.5-5+17.5-topBotDiff+2.5*notePos[pitch[i]], notePic,8,14);
 				}
 			}
 			//			StdDraw.line(0, -75, 0, -95);
