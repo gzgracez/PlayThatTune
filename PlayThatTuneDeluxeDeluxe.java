@@ -38,15 +38,27 @@ public class PlayThatTuneDeluxeDeluxe {
 			i++;
 			//double [] a = note(pitch, duration);
 			//StdAudio.play(a);
-			StdAudio.play(note(pitch, duration));
-			StdDraw.setPenColor((int)(duration*100),168+(int)(duration*50),255);
-			StdDraw.filledRectangle(100, 110, 110,100);
-			StdDraw.setPenColor(StdDraw.RED); 
-			StdDraw.filledCircle(100+50*Math.sin(pitch*10), 100+50*Math.cos(pitch*10), 20);
+			StdDraw.setPenColor((int)(map((float)duration,0,2,0,255)),168+(int)(map((float)duration,0.0f,2.0f,0.0f,86.0f)),255);
+			StdDraw.filledSquare(100, 100, 110);
+			
+			StdDraw.setPenColor(StdDraw.BLACK); 
+			for (int r=40; r<=100; r+=20) StdDraw.circle(100, 100, r);
+			
+			StdDraw.setPenColor(0,(int)map(pitch,0,22,100,255),100);
+			StdDraw.circle(100, 100, (map(pitch,0,22,50,80)));
+			//StdDraw.setPenColor(StdDraw.RED); 
+			//StdDraw.filledCircle(100+50*Math.cos(pitch*10), 100+50*Math.sin(pitch*10), 20);
+			StdDraw.filledCircle(100+(map(pitch,0,22,50,80))*Math.cos(pitch*10), 100+(map(pitch,0,22,50,80))*Math.sin(pitch*10), 20);
+			if (Math.cos(pitch*10)>=0) StdDraw.picture(100, 100, "tigerstandright.png");
+			else StdDraw.picture(100, 100, "tigerstandleft.png");
 			drawNotes(i,duration,pitch);
-			StdDraw.show(); 
 		}
-
+		StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+		StdDraw.filledSquare(100, 100, 110);
+		StdDraw.setPenColor(StdDraw.BLACK); 
+		for (int r=40; r<=100; r+=20) StdDraw.circle(100, 100, r);
+		StdDraw.picture(100, 100, "tigerwaving.png");
+		StdDraw.show(); 
 		/*
 		StdDraw.setXscale();
 		StdDraw.setYscale();
@@ -74,7 +86,7 @@ public class PlayThatTuneDeluxeDeluxe {
 
 		if (i%30==0){
 			StdDraw.setPenColor(StdDraw.WHITE); 
-			StdDraw.filledRectangle(100, startY-12.5, 100, 50);
+			StdDraw.filledRectangle(100, startY-12.5, 100, 45);
 		}
 		StdDraw.setPenColor(StdDraw.BLACK); 
 		StdDraw.line(0, startY+12.5, 0, startY-7.5);
@@ -164,7 +176,6 @@ public class PlayThatTuneDeluxeDeluxe {
 		//			}
 		//			StdDraw.picture(10, -85, "bass.png",15,20);
 		StdDraw.show(20); 
-		map(2,1,3,1,10);
 	}
 
 	// take weighted sum of two arrays

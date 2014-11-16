@@ -148,7 +148,6 @@ public class pttdrawonly {
 		//			}
 		//			StdDraw.picture(10, -85, "bass.png",15,20);
 		StdDraw.show(600); 
-		map(2,1,3,1,10);
 	}
 
 	// take weighted sum of two arrays
