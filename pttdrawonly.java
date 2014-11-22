@@ -265,6 +265,7 @@ public class pttdrawonly {
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
     // create a note with harmonics of of the given pitch, where 0 = concert A
     public static double[] noteAndChord(int pitch,int base, double t) {
@@ -302,6 +303,8 @@ public class pttdrawonly {
         
         return sum(suma, chordtotal, .4, .6);
     }
+=======
+>>>>>>> FETCH_HEAD
 =======
 >>>>>>> FETCH_HEAD
 =======
