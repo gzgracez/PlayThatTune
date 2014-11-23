@@ -8,7 +8,7 @@ import java.util.Random;
  * <p>
  * @author Grace Z. & David B.
  * @version 1.0
- * @since 2014-011-18
+ * @since 2014-11-18
  */
 public class pttdrawonly {
 	/**
@@ -20,6 +20,7 @@ public class pttdrawonly {
 
 	public static void main(String[] args) {
 		Integer pitch[]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,22,0,1,2,3,4,5,6,7,8,9,10};
+		Integer basePitch[]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,22,0,1,2,3,4,5,6,7,8,9,10,11};
 		//Integer pitch[]={12,5,3,15,19,3,12,5,12,7,15,19,3,3,3,19,15,3,17,22,5,3,15,10,12,10,7,5,12,19};
 		Double duration[]={0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375};
 		//System.out.println(pitch1);
@@ -29,8 +30,10 @@ public class pttdrawonly {
 		StdDraw.setXscale(0,200);
 		StdDraw.setYscale(-100,200);
 		for (int i=0;i<pitch.length;i++){
-			double[] a = note(pitch[i], duration[i]);
-			StdAudio.play(a);
+			//double[] a = note(pitch[i], duration[i]);
+			//StdAudio.play(a);
+			double[] a = majorChord(pitch[i],basePitch[i], duration[i]);
+            StdAudio.play(a);
 			StdDraw.setPenColor((int)(map(duration[i],0,2,0,255)),168+(int)(map(duration[i],0.0f,2.0f,0.0f,86.0f)),255);
 			StdDraw.filledSquare(100, 100, 110);
 
@@ -263,12 +266,15 @@ public class pttdrawonly {
 		double[] h  = sum(hi, lo, .5, .5);
 		return sum(a, h, .5, .5);
 	}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	
-    // create a note with harmonics of of the given pitch, where 0 = concert A
-    public static double[] noteAndChord(int pitch,int base, double t) {
+    /**
+     * This method is used to play the note and a major chord that uses a given note as the base note
+     * @param pitch This is the pitch of the desired note
+     * @param base This is the base note of the chord
+     * @param t This is the duration of the note
+     * @return double[] This returns the note and major chord that goes with it
+     */
+    public static double[] majorChord(int pitch,int base, double t) {
         double hz1 = 440.0 * Math.pow(2, pitch / 12.0);
         double hzbase = 440.0 * Math.pow(2, base  / 12.0);
         double hzbase2 = 440.0 * Math.pow(2, (base + 4) / 12.0);
@@ -303,11 +309,48 @@ public class pttdrawonly {
         
         return sum(suma, chordtotal, .4, .6);
     }
-=======
->>>>>>> FETCH_HEAD
-=======
->>>>>>> FETCH_HEAD
-=======
->>>>>>> FETCH_HEAD
+    
+    /**
+     * This method is used to play the note and a minor chord that uses a given note as the base note
+     * @param pitch This is the pitch of the desired note
+     * @param base This is the base note of the chord
+     * @param t This is the duration of the note
+     * @return double[] This returns the note and major chord that goes with it
+     */
+    public static double[] minorChord(int pitch,int base, double t) {
+        double hz1 = 440.0 * Math.pow(2, pitch / 12.0);
+        double hzbase = 440.0 * Math.pow(2, base  / 12.0);
+        double hzbase2 = 440.0 * Math.pow(2, (base + 3) / 12.0);
+        double hzbase3 = 440.0 * Math.pow(2, (base + 7) / 12.0);
+        
+        double[] a  = tone(hz1, t);
+        double[] ahi = tone(2*hz1, t);
+        double[] alo = tone(hz1/2, t);
+        double[] ah  = sum(ahi, alo, .5, .5);
+        double[] suma = sum(a, ah, .5, .5);
+        
+        double[] b  = tone(hzbase, t);
+        double[] bhi = tone(2*hzbase, t);
+        double[] blo = tone(hzbase*1/2, t);
+        double[] bh  = sum(bhi, blo, .5, .5);
+        double[] sumb = sum(b, bh, .5, .5);
+        
+        double[] c  = tone(hzbase2, t);
+        double[] chi = tone(2*hzbase2, t);
+        double[] clo = tone(hzbase2*1/2, t);
+        double[] ch  = sum(chi, clo, .5, .5);
+        double[] sumc = sum(c, ch, .5, .5);
+        
+        double[] d  = tone(hzbase3, t);
+        double[] dhi = tone(2*hzbase3, t);
+        double[] dlo = tone(hzbase3*1/2, t);
+        double[] dh  = sum(dhi, dlo, .5, .5);
+        double[] sumd = sum(d, dh, .5, .5);
+        
+        double[] chordp1 = sum(sumb, sumc, .5, .5);
+        double[] chordtotal = sum(chordp1, sumd, .67,.33);
+        
+        return sum(suma, chordtotal, .4, .6);
+    }
 
 }
