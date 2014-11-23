@@ -8,7 +8,7 @@ import java.util.Random;
  * <p>
  * @author Grace Z. & David B.
  * @version 1.0
- * @since 2014-011-18
+ * @since 2014-11-18
  */
 public class pttdrawonly {
 	/**
@@ -20,17 +20,19 @@ public class pttdrawonly {
 
 	public static void main(String[] args) {
 		Integer pitch[]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,22,0,1,2,3,4,5,6,7,8,9,10};
+		Double volume[]={0.1,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.2,0.1,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0};
+		Integer basePitch[]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,22,0,1,2,3,4,5,6,7,8,9,10,11};
 		//Integer pitch[]={12,5,3,15,19,3,12,5,12,7,15,19,3,3,3,19,15,3,17,22,5,3,15,10,12,10,7,5,12,19};
 		Double duration[]={0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375};
-		//System.out.println(pitch1);
-		// read in pitch-duration pairs from standard input
-		System.out.println(duration.length);
 		StdDraw.setCanvasSize(600,900);
 		StdDraw.setXscale(0,200);
 		StdDraw.setYscale(-100,200);
 		for (int i=0;i<pitch.length;i++){
-			double[] a = note(pitch[i], duration[i]);
+			//double[] a = note(pitch[i], duration[i],volume[i]);
+			//StdAudio.play(a);
+			double[] a = minorChord(pitch[i],basePitch[i], duration[i],volume[i]);
 			StdAudio.play(a);
+			StdDraw.setPenRadius(.002);
 			StdDraw.setPenColor((int)(map(duration[i],0,2,0,255)),168+(int)(map(duration[i],0.0f,2.0f,0.0f,86.0f)),255);
 			StdDraw.filledSquare(100, 100, 110);
 
@@ -41,18 +43,40 @@ public class pttdrawonly {
 			StdDraw.circle(100, 100, (map(pitch[i],0,22,50,80)));
 			//StdDraw.setPenColor(StdDraw.RED); 
 			//StdDraw.filledCircle(100+50*Math.cos(pitch[i]*10), 100+50*Math.sin(pitch[i]*10), 20);
-			StdDraw.filledCircle(100+(map(pitch[i],0,22,50,80))*Math.cos(pitch[i]*10), 100+(map(pitch[i],0,22,50,80))*Math.sin(pitch[i]*10), 20);
+			StdDraw.filledCircle(100+(map(pitch[i],0,22,50,80))*Math.cos(pitch[i]*10), 100+(map(pitch[i],0,22,50,80))*Math.sin(pitch[i]*10), 10);
+			StdDraw.setPenRadius(.01);
+			StdDraw.line(100+(map(pitch[i],0,22,50,80))*Math.cos(pitch[i]*10)+9.5, 100+(map(pitch[i],0,22,50,80))*Math.sin(pitch[i]*10), 100+(map(pitch[i],0,22,50,80))*Math.cos(pitch[i]*10)+9.5, 100+(map(pitch[i],0,22,50,80))*Math.sin(pitch[i]*10)+30);
+			StdDraw.setPenRadius(.002);
 			if (Math.cos(pitch[i]*10)>=0) StdDraw.picture(100, 100, "tigerstandright.png");
 			else StdDraw.picture(100, 100, "tigerstandleft.png");
 			drawNotes(i,duration[i],pitch[i]);
-			System.out.println(i);
 		}
-		StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
-		StdDraw.filledSquare(100, 100, 110);
-		StdDraw.setPenColor(StdDraw.BLACK); 
-		for (int r=40; r<=100; r+=20) StdDraw.circle(100, 100, r);
-		StdDraw.picture(100, 100, "tigerwaving.png");
 		StdDraw.show(); 
+		for (int z=0; z<=4; z++){
+			StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+			StdDraw.filledSquare(100, 100, 110);
+			if(z%4==0) StdDraw.picture(100, 100, "tigerwavingup.png",50,50);
+			if(z%4==1) StdDraw.picture(100, 100, "tigerwaving.png",50,50);
+			if(z%4==2) StdDraw.picture(100, 100, "tigerwavingdown.png",50,50);
+			if(z%4==2) StdDraw.picture(100, 100, "tigerwaving.png",50,50);
+			StdDraw.show(100); 
+		}
+		int length=0;
+		for (int z=0; z<pitch.length;z++){
+			for(int y=0; y<StdAudio.SAMPLE_RATE*duration[z];y++){
+				length++;
+			}
+		}
+		double finalNotes[]=new double[length];
+		int count=0;
+		for (int z=0; z<pitch.length;z++){
+			double[] b = majorChord(pitch[z],basePitch[z], duration[z],volume[z]);
+			for(int y=0; y<StdAudio.SAMPLE_RATE*duration[z];y++){
+				finalNotes[count]=b[y];
+				count++;
+			}
+		}
+		StdAudio.save("final.wav",finalNotes);
 
 		// needed to terminate program - known Java bug
 		System.exit(0);
@@ -252,62 +276,138 @@ public class pttdrawonly {
 	 * This method is used to create a note with harmonics of the given pitch, where the volume changes
 	 * @param pitch This is the pitch of the note
 	 * @param t This is the duration of the note
-	 * 
+	 * @param vol This is how much the note's volume should be scaled by
 	 * @return double This returns the note with harmonics of the given pitch
 	 */
-	public static double[] note(int pitch, double t, int vol) {
+	public static double[] note(int pitch, double t, double vol) {
 		double hz = 440.0 * Math.pow(2, pitch / 12.0);
-		double[] a  = tone(hz, t);
-		double[] hi = tone(2*hz, t);
-		double[] lo = tone(hz/2, t);
+		double[] a  = volume(hz, t,vol);
+		double[] hi = volume(2*hz, t,vol);
+		double[] lo = volume(hz/2, t,vol);
 		double[] h  = sum(hi, lo, .5, .5);
 		return sum(a, h, .5, .5);
 	}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	
-    // create a note with harmonics of of the given pitch, where 0 = concert A
-    public static double[] noteAndChord(int pitch,int base, double t) {
-        double hz1 = 440.0 * Math.pow(2, pitch / 12.0);
-        double hzbase = 440.0 * Math.pow(2, base  / 12.0);
-        double hzbase2 = 440.0 * Math.pow(2, (base + 4) / 12.0);
-        double hzbase3 = 440.0 * Math.pow(2, (base + 7) / 12.0);
-        
-        double[] a  = tone(hz1, t);
-        double[] ahi = tone(2*hz1, t);
-        double[] alo = tone(hz1/2, t);
-        double[] ah  = sum(ahi, alo, .5, .5);
-        double[] suma = sum(a, ah, .5, .5);
-        
-        double[] b  = tone(hzbase, t);
-        double[] bhi = tone(2*hzbase, t);
-        double[] blo = tone(hzbase*1/2, t);
-        double[] bh  = sum(bhi, blo, .5, .5);
-        double[] sumb = sum(b, bh, .5, .5);
-        
-        double[] c  = tone(hzbase2, t);
-        double[] chi = tone(2*hzbase2, t);
-        double[] clo = tone(hzbase2*1/2, t);
-        double[] ch  = sum(chi, clo, .5, .5);
-        double[] sumc = sum(c, ch, .5, .5);
-        
-        double[] d  = tone(hzbase3, t);
-        double[] dhi = tone(2*hzbase3, t);
-        double[] dlo = tone(hzbase3*1/2, t);
-        double[] dh  = sum(dhi, dlo, .5, .5);
-        double[] sumd = sum(d, dh, .5, .5);
-        
-        double[] chordp1 = sum(sumb, sumc, .5, .5);
-        double[] chordtotal = sum(chordp1, sumd, .67,.33);
-        
-        return sum(suma, chordtotal, .4, .6);
-    }
-=======
->>>>>>> FETCH_HEAD
-=======
->>>>>>> FETCH_HEAD
-=======
->>>>>>> FETCH_HEAD
+
+	/**
+	 * This method is used to play the note and a major chord that uses a given note as the base note
+	 * @param pitch This is the pitch of the desired note
+	 * @param base This is the base note of the chord
+	 * @param t This is the duration of the note
+	 * @return double[] This returns the note and major chord that goes with it
+	 */
+	public static double[] majorChord(int pitch,int base, double t) {
+		double hz1 = 440.0 * Math.pow(2, pitch / 12.0);
+		double hzbase = 440.0 * Math.pow(2, base  / 12.0);
+		double hzbase2 = 440.0 * Math.pow(2, (base + 4) / 12.0);
+		double hzbase3 = 440.0 * Math.pow(2, (base + 7) / 12.0);
+
+		double[] a  = tone(hz1, t);
+		double[] ahi = tone(2*hz1, t);
+		double[] alo = tone(hz1/2, t);
+		double[] ah  = sum(ahi, alo, .5, .5);
+		double[] suma = sum(a, ah, .5, .5);
+
+		double[] b  = tone(hzbase, t);
+		double[] bhi = tone(2*hzbase, t);
+		double[] blo = tone(hzbase*1/2, t);
+		double[] bh  = sum(bhi, blo, .5, .5);
+		double[] sumb = sum(b, bh, .5, .5);
+
+		double[] c  = tone(hzbase2, t);
+		double[] chi = tone(2*hzbase2, t);
+		double[] clo = tone(hzbase2*1/2, t);
+		double[] ch  = sum(chi, clo, .5, .5);
+		double[] sumc = sum(c, ch, .5, .5);
+
+		double[] d  = tone(hzbase3, t);
+		double[] dhi = tone(2*hzbase3, t);
+		double[] dlo = tone(hzbase3*1/2, t);
+		double[] dh  = sum(dhi, dlo, .5, .5);
+		double[] sumd = sum(d, dh, .5, .5);
+
+		double[] chordp1 = sum(sumb, sumc, .5, .5);
+		double[] chordtotal = sum(chordp1, sumd, .67,.33);
+
+		return sum(suma, chordtotal, .4, .6);
+	}
+
+	/**
+	 * This method is used to play the note and a minor chord that uses a given note as the base note
+	 * @param pitch This is the pitch of the desired note
+	 * @param base This is the base note of the chord
+	 * @param t This is the duration of the note
+	 * @return double[] This returns the note and minor chord that goes with it
+	 */
+	public static double[] minorChord(int pitch,int base, double t) {
+		double hz1 = 440.0 * Math.pow(2, pitch / 12.0);
+		double hzbase = 440.0 * Math.pow(2, base  / 12.0);
+		double hzbase2 = 440.0 * Math.pow(2, (base + 3) / 12.0);
+		double hzbase3 = 440.0 * Math.pow(2, (base + 7) / 12.0);
+
+		double[] a  = tone(hz1, t);
+		double[] ahi = tone(2*hz1, t);
+		double[] alo = tone(hz1/2, t);
+		double[] ah  = sum(ahi, alo, .5, .5);
+		double[] suma = sum(a, ah, .5, .5);
+
+		double[] b  = tone(hzbase, t);
+		double[] bhi = tone(2*hzbase, t);
+		double[] blo = tone(hzbase*1/2, t);
+		double[] bh  = sum(bhi, blo, .5, .5);
+		double[] sumb = sum(b, bh, .5, .5);
+
+		double[] c  = tone(hzbase2, t);
+		double[] chi = tone(2*hzbase2, t);
+		double[] clo = tone(hzbase2*1/2, t);
+		double[] ch  = sum(chi, clo, .5, .5);
+		double[] sumc = sum(c, ch, .5, .5);
+
+		double[] d  = tone(hzbase3, t);
+		double[] dhi = tone(2*hzbase3, t);
+		double[] dlo = tone(hzbase3*1/2, t);
+		double[] dh  = sum(dhi, dlo, .5, .5);
+		double[] sumd = sum(d, dh, .5, .5);
+
+		double[] chordp1 = sum(sumb, sumc, .5, .5);
+		double[] chordtotal = sum(chordp1, sumd, .67,.33);
+
+		return sum(suma, chordtotal, .4, .6);
+	}
+
+	/**
+	 * This method is used to play the note and a major chord that uses a given note as the base note
+	 * @param pitch This is the pitch of the desired note
+	 * @param base This is the base note of the chord
+	 * @param t This is the duration of the note
+	 * @param vol This is how much the note's volume should be scaled by
+	 * @return double[] This returns the note and major chord that goes with it
+	 */
+	public static double[] majorChord(int pitch,int base, double t, double vol) {
+		double[] suma=note(pitch,t,vol);
+		double[] sumb = note(base,t,vol);
+		double[] sumc = note(base+4,t,vol);
+		double[] sumd = note(base+7,t,vol);
+		double[] chordp1 = sum(sumb, sumc, .5, .5);
+		double[] chordtotal = sum(chordp1, sumd, .67,.33);
+		return sum(suma, chordtotal, .4, .6);
+	}
+
+	/**
+	 * This method is used to play the note and a minor chord that uses a given note as the base note
+	 * @param pitch This is the pitch of the desired note
+	 * @param base This is the base note of the chord
+	 * @param t This is the duration of the note
+	 * @param vol This is how much the note's volume should be scaled by
+	 * @return double[] This returns the note and major chord that goes with it
+	 */
+	public static double[] minorChord(int pitch,int base, double t, double vol) {
+		double[] suma=note(pitch,t,vol);
+		double[] sumb = note(base,t,vol);
+		double[] sumc = note(base+3,t,vol);
+		double[] sumd = note(base+7,t,vol);
+		double[] chordp1 = sum(sumb, sumc, .5, .5);
+		double[] chordtotal = sum(chordp1, sumd, .67,.33);
+		return sum(suma, chordtotal, .4, .6);
+	}
 
 }
