@@ -22,13 +22,13 @@ public class pttdrawonly {
 		Integer basePitch[]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,22,0,1,2,3,4,5,6,7,8,9,10,11};
 		//Integer pitch[]={12,5,3,15,19,3,12,5,12,7,15,19,3,3,3,19,15,3,17,22,5,3,15,10,12,10,7,5,12,19};
 		Double duration[]={0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375};
-		StdDraw.setCanvasSize(600,900);
-		StdDraw.setXscale(0,200);
-		StdDraw.setYscale(-100,200);
+		StdDraw.setCanvasSize(850,500);
+		StdDraw.setXscale(0,430);
+		StdDraw.setYscale(-10,200);
 		for (int i=0;i<pitch.length;i++){
 			//double[] a = note(pitch[i], duration[i],volume[i]);
 			//StdAudio.play(a);
-			double[] a = major(pitch[i],basePitch[i], duration[i],volume[i]);
+			double[] a = majorChord(pitch[i],basePitch[i], duration[i],volume[i]);
 			StdAudio.play(a);
 			StdDraw.setPenRadius(.002);
 			StdDraw.setPenColor((int)(map(duration[i],0,2,0,255)),168+(int)(map(duration[i],0.0f,2.0f,0.0f,86.0f)),255);
@@ -47,7 +47,7 @@ public class pttdrawonly {
 			StdDraw.setPenRadius(.002);
 			if (Math.cos(pitch[i]*10)>=0) StdDraw.picture(100, 100, "tigerstandright.png");
 			else StdDraw.picture(100, 100, "tigerstandleft.png");
-			drawNotes(i,duration[i],pitch[i]);
+			drawNotes(i,duration[i],pitch[i], 250, 150);
 		}
 		StdDraw.show(); 
 		for (int z=0; z<=4; z++){
@@ -99,33 +99,35 @@ public class pttdrawonly {
 	 * This method is used to draw the actual notes of the sheet music
 	 * @param i This is the ith note of the sequence of notes
 	 * @param duration This is the duration of that note
-	 * @param pitch This is the pitch of that note=
+	 * @param pitch This is the pitch of that note
+	 * @param startX This is the center X-position of the sheet music
+	 * @param startY This is the center Y-position of the sheet music
 	 * @return Nothing
 	 */
-	public static void drawNotes(int i, double duration, int pitch){
+	public static void drawNotes(int i, double duration, int pitch, float startX, float startY){
 		Integer notePos[]={0,0,1,2,2,3,3,4,5,5,6,6,0,0,1,2,2,3,3,4,5,5,6};//23, 0-22
-		int startX=25;
-		float startY=(float)-42.5;
+		//startX=225;
+		//startY=(float)50;
 		int topBotDiff=45;
 		int dist=12;
 		String notePic="quarternote.png";
 
 		if (i%30==0){
 			StdDraw.setPenColor(StdDraw.WHITE); 
-			StdDraw.filledRectangle(100, startY-12.5, 100, 45);
+			StdDraw.filledRectangle(startX+75, startY-12.5, 100, 45);
 		}
 		StdDraw.setPenColor(StdDraw.BLACK); 
-		StdDraw.line(0, startY+12.5, 0, startY-7.5);
-		for (int a=-30;a>-55; a-=5){
-			StdDraw.line(0, a, 200, a);
+		StdDraw.line(startX-25, startY+12.5, startX-25, startY-7.5);
+		for (double a=(startY+12.5);a>(startY-12.5); a-=5){
+			StdDraw.line(startX-25, a, startX+175, a);
 		}
-		StdDraw.picture(9, startY, "treble.png",15,40);
+		StdDraw.picture(startX-16, startY, "treble.png",15,40);
 
-		StdDraw.line(0, startY-32.5, 0, startY-52.5);
-		for (int a=-75;a>-100; a-=5){
-			StdDraw.line(0, a, 200, a);
+		StdDraw.line(startX-25, startY-32.5, startX-25, startY-52.5);
+		for (double a=startY-32.5;a>startY-57.5; a-=5){
+			StdDraw.line(startX-25, a, startX+175, a);
 		}
-		StdDraw.picture(9, startY-45, "treble.png",15,40);
+		StdDraw.picture(startX-16, startY-45, "treble.png",15,40);
 
 		if (i%30<15){//top
 			if (pitch<2){
@@ -146,17 +148,17 @@ public class pttdrawonly {
 			else if (pitch==12 || pitch==14 || pitch==15 || pitch==17 || pitch==19 || 
 					pitch==20 || pitch==22){
 				notePic="quarternotedown.png";
-				for(int b=-30;b<=(-25+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+				for(double b=startY+12.5;b<=(startY+17.5+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
 				StdDraw.picture(startX+dist*(i%15), startY-5+17.5+2.5*notePos[pitch], notePic,8,14);
 			}
 			else if (pitch==4 || pitch==6 || pitch==9 || pitch==11){
 				notePic="quarternotedown.png";
-				StdDraw.text(startX-4+dist*(i%15), -43+2.5*notePos[pitch], "\u0023");
+				StdDraw.text(startX-4+dist*(i%15), startY-.5+2.5*notePos[pitch], "\u0023");
 				StdDraw.picture(startX+.5+dist*(i%15), startY-5+2.5*notePos[pitch], notePic,8,14);
 			}
 			else if (pitch==13 || pitch==16 || pitch==18 || pitch==21 || pitch==23){
 				notePic="quarternotedown.png";
-				for(int b=-30;b<=(-25+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+				for(double b=startY+12.5;b<=(startY+17.5+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
 				StdDraw.text(startX-4+dist*(i%15), startY-.5+17.5+2.5*notePos[pitch], "\u0023");
 				StdDraw.picture(startX+.5+dist*(i%15), startY-5+17.5+2.5*notePos[pitch], notePic,8,14);
 			}
@@ -181,7 +183,7 @@ public class pttdrawonly {
 			else if (pitch==12 || pitch==14 || pitch==15 || pitch==17 || pitch==19 || 
 					pitch==20 || pitch==22){
 				notePic="quarternotedown.png";
-				for(int b=-75;b<=(-70+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+				for(double b=startY-32.5;b<=(startY-27.5+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
 				StdDraw.picture(startX+dist*(i%15), startY-5+17.5-topBotDiff+2.5*notePos[pitch], notePic,8,14);
 			}
 			else if (pitch==4 || pitch==6 || pitch==9 || pitch==11){
@@ -191,7 +193,7 @@ public class pttdrawonly {
 			}
 			else if (pitch==13 || pitch==16 || pitch==18 || pitch==21 || pitch==23){
 				notePic="quarternotedown.png";
-				for(int b=-75;b<=(-70+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+				for(double b=startY-32.5;b<=(startY-27.5+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
 				StdDraw.text(startX-4+dist*(i%15), startY-.5+17.5-topBotDiff+2.5*notePos[pitch], "\u0023");
 				StdDraw.picture(startX+.5+dist*(i%15), startY-5+17.5-topBotDiff+2.5*notePos[pitch], notePic,8,14);
 			}
