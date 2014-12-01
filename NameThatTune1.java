@@ -24,22 +24,12 @@ public class NameThatTune1 {
 	 * @return Nothing
 	 */
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException{
 		ArrayList<String> orig=new ArrayList<String>();
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader("randomSong.txt"));
-			while ((br.readLine()) != null) {
-				orig.add(br.readLine());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null)br.close();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+		BufferedReader br = new BufferedReader(new FileReader("randomSong.txt"));
+		String line = null;
+		while ((line=br.readLine()) != null) {
+			orig.add(line);
 		}
 		Integer pitch[]=new Integer[orig.size()];
 		//Double volume[]=new Double[orig.size()];
@@ -59,7 +49,7 @@ public class NameThatTune1 {
 		Integer basePitch[]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,22,0,1,2,3,4,5,6,7,8,9,10,11};
 		//Integer pitch[]={12,5,3,15,19,3,12,5,12,7,15,19,3,3,3,19,15,3,17,22,5,3,15,10,12,10,7,5,12,19};
 		Double duration[]={0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375};
-		*/
+		 */
 		StdDraw.setCanvasSize(850,500);
 		StdDraw.setXscale(0,430);
 		StdDraw.setYscale(-10,200);
@@ -96,7 +86,7 @@ public class NameThatTune1 {
 			if(z%4==0) StdDraw.picture(100, 100, "tigerwavingup.png",50,50);
 			if(z%4==1) StdDraw.picture(100, 100, "tigerwaving.png",50,50);
 			if(z%4==2) StdDraw.picture(100, 100, "tigerwavingdown.png",50,50);
-			if(z%4==2) StdDraw.picture(100, 100, "tigerwaving.png",50,50);
+			if(z%4==3) StdDraw.picture(100, 100, "tigerwaving.png",50,50);
 			StdDraw.show(100); 
 		}
 		int length=0;
@@ -449,71 +439,71 @@ public class NameThatTune1 {
 		double[] chordtotal = sum(chordp1, sumd, .67,.33);
 		return sum(suma, chordtotal, .4, .6);
 	}
-	
+
 	/**
 	 * This method 
 	 * @param value
 	 * @return int 
 	 */
-    static short[] chordIntervals(int value) {
-    	short intervals[] = new short[2];
-    	if(value == 1) {
-    		intervals[0] = 4;
-    		intervals[1] = 7;
-    	}
-    	else if(value == 2) {
-    		intervals[0] = 3;
-    		intervals[1] = 7;
-    	}
-    	else {
-    		intervals[0] = 6;
-    		intervals[1] = 8;
-    	}
-    	
-    	return intervals;
-    }
+	static short[] chordIntervals(int value) {
+		short intervals[] = new short[2];
+		if(value == 1) {
+			intervals[0] = 4;
+			intervals[1] = 7;
+		}
+		else if(value == 2) {
+			intervals[0] = 3;
+			intervals[1] = 7;
+		}
+		else {
+			intervals[0] = 6;
+			intervals[1] = 8;
+		}
 
-    /**
-     * This method
-     * @param pitch
-     * @param base
-     * @param ints
-     * @param t
-     * @return
-     */
-    public static double[] note(int pitch,int base,short[] ints, double t) {
-        double hz1 = 440.0 * Math.pow(2, pitch / 12.0);
-        double hzbase = 440.0 * Math.pow(2, base  / 12.0);
-        double hzbase2 = 440.0 * Math.pow(2, (base + ints[0]) / 12.0);
-        double hzbase3 = 440.0 * Math.pow(2, (base + ints[1]) / 12.0);
-        
-        double[] a  = tone(hz1, t);
-        double[] ahi = tone(2*hz1, t);
-        double[] alo = tone(hz1/2, t);
-        double[] ah  = sum(ahi, alo, .5, .5);
-        double[] suma = sum(a, ah, .5, .5);
-        
-        double[] b  = tone(hzbase, t);
-        double[] bhi = tone(2*hzbase, t);
-        double[] blo = tone(hzbase*1/2, t);
-        double[] bh  = sum(bhi, blo, .5, .5);
-        double[] sumb = sum(b, bh, .5, .5);
-        
-        double[] c  = tone(hzbase2, t);
-        double[] chi = tone(2*hzbase2, t);
-        double[] clo = tone(hzbase2*1/2, t);
-        double[] ch  = sum(chi, clo, .5, .5);
-        double[] sumc = sum(c, ch, .5, .5);
-        
-        double[] d  = tone(hzbase3, t);
-        double[] dhi = tone(2*hzbase3, t);
-        double[] dlo = tone(hzbase3*1/2, t);
-        double[] dh  = sum(dhi, dlo, .5, .5);
-        double[] sumd = sum(d, dh, .5, .5);
-        
-        double[] chordp1 = sum(sumb, sumc, .5, .5);
-        double[] chordtotal = sum(chordp1, sumd, .67,.33);
-        
-        return sum(suma, chordtotal, .4, .6);
-    }
+		return intervals;
+	}
+
+	/**
+	 * This method
+	 * @param pitch
+	 * @param base
+	 * @param ints
+	 * @param t
+	 * @return
+	 */
+	public static double[] note(int pitch,int base,short[] ints, double t) {
+		double hz1 = 440.0 * Math.pow(2, pitch / 12.0);
+		double hzbase = 440.0 * Math.pow(2, base  / 12.0);
+		double hzbase2 = 440.0 * Math.pow(2, (base + ints[0]) / 12.0);
+		double hzbase3 = 440.0 * Math.pow(2, (base + ints[1]) / 12.0);
+
+		double[] a  = tone(hz1, t);
+		double[] ahi = tone(2*hz1, t);
+		double[] alo = tone(hz1/2, t);
+		double[] ah  = sum(ahi, alo, .5, .5);
+		double[] suma = sum(a, ah, .5, .5);
+
+		double[] b  = tone(hzbase, t);
+		double[] bhi = tone(2*hzbase, t);
+		double[] blo = tone(hzbase*1/2, t);
+		double[] bh  = sum(bhi, blo, .5, .5);
+		double[] sumb = sum(b, bh, .5, .5);
+
+		double[] c  = tone(hzbase2, t);
+		double[] chi = tone(2*hzbase2, t);
+		double[] clo = tone(hzbase2*1/2, t);
+		double[] ch  = sum(chi, clo, .5, .5);
+		double[] sumc = sum(c, ch, .5, .5);
+
+		double[] d  = tone(hzbase3, t);
+		double[] dhi = tone(2*hzbase3, t);
+		double[] dlo = tone(hzbase3*1/2, t);
+		double[] dh  = sum(dhi, dlo, .5, .5);
+		double[] sumd = sum(d, dh, .5, .5);
+
+		double[] chordp1 = sum(sumb, sumc, .5, .5);
+		double[] chordtotal = sum(chordp1, sumd, .67,.33);
+
+		return sum(suma, chordtotal, .4, .6);
+	}
 }
