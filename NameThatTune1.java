@@ -6,6 +6,7 @@ import java.util.ArrayList;
 /*
  * ADD VOLUME AS ONE OF THE THINGS TO ENTER
  * Should every note have a chord to go with it?
+ * Waving Tiger gets smaller
  */
 /**
  * <h1>Create Random Music!</h1>
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  * @version 1.0
  * @since 2014-11-18
  */
-public class pttdrawonly {
+public class NameThatTune1 {
 	/**
 	 * This is the main method which makes use of the drawNotes() and note() methods as well as StdAudio
 	 * This uses the drawNotes() and note() methods as well as StdAudio
@@ -41,19 +42,20 @@ public class pttdrawonly {
 			}
 		}
 		Integer pitch[]=new Integer[orig.size()];
-		Double volume[]=new Double[orig.size()];
+		//Double volume[]=new Double[orig.size()];
 		Integer basePitch[]=new Integer[orig.size()];
+		Integer ints[]=new Integer[orig.size()];
 		Double duration[]=new Double[orig.size()];
 		for (int i=0;i<orig.size(); i++){
 			String[] chunks = orig.get(i).split(" ");
 			pitch[i]=Integer.parseInt(chunks[0]);
-			volume[i]=Double.parseDouble(chunks[1]);
-			basePitch[i]=Integer.parseInt(chunks[2]);
+			basePitch[i]=Integer.parseInt(chunks[1]);
+			ints[i]=Integer.parseInt(chunks[2]);
 			duration[i]=Double.parseDouble(chunks[3]);
 		}
 		/*
 		Integer pitch[]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,22,0,1,2,3,4,5,6,7,8,9,10};
-		Double volume[]={0.1,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.2,0.1,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0};
+		Double basePitch[]={0.1,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.2,0.1,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0};
 		Integer basePitch[]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,22,0,1,2,3,4,5,6,7,8,9,10,11};
 		//Integer pitch[]={12,5,3,15,19,3,12,5,12,7,15,19,3,3,3,19,15,3,17,22,5,3,15,10,12,10,7,5,12,19};
 		Double duration[]={0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375};
@@ -62,9 +64,11 @@ public class pttdrawonly {
 		StdDraw.setXscale(0,430);
 		StdDraw.setYscale(-10,200);
 		for (int i=0;i<pitch.length;i++){
-			//double[] a = note(pitch[i], duration[i],volume[i]);
+			//double[] a = note(pitch[i], duration[i],basePitch[i]);
 			//StdAudio.play(a);
-			double[] a = majorChord(pitch[i],basePitch[i], duration[i],volume[i]);
+			//double[] a = majorChord(pitch[i],basePitch[i], duration[i],basePitch[i]);
+			short baseQuality[]=chordIntervals(ints[i]);
+			double[] a = note(pitch[i],basePitch[i],baseQuality, duration[i]);
 			StdAudio.play(a);
 			StdDraw.setPenRadius(.002);
 			StdDraw.setPenColor((int)(map(duration[i],0,2,0,255)),168+(int)(map(duration[i],0.0f,2.0f,0.0f,86.0f)),255);
@@ -104,7 +108,7 @@ public class pttdrawonly {
 		double finalNotes[]=new double[length];
 		int count=0;
 		for (int z=0; z<pitch.length;z++){
-			double[] b = majorChord(pitch[z],basePitch[z], duration[z],volume[z]);
+			double[] b = majorChord(pitch[z],basePitch[z], duration[z],basePitch[z]);
 			for(int y=0; y<StdAudio.SAMPLE_RATE*duration[z];y++){
 				finalNotes[count]=b[y];
 				count++;

@@ -1,4 +1,7 @@
 import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 
 public class MusicTest {
 	static int notes[] = new int[30];
@@ -15,6 +18,7 @@ public class MusicTest {
 		for(int i = 0; i < notes.length; i++) {
 			System.out.print(times[i] + ",");
 		}
+		File file = new File("randomSong.txt");
 		
 	}
 	static short selectNote(short key) {
