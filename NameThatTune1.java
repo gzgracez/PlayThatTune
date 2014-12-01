@@ -7,6 +7,11 @@ import java.util.ArrayList;
  * ADD VOLUME AS ONE OF THE THINGS TO ENTER
  * Should every note have a chord to go with it?
  * Waving Tiger gets smaller
+ * make cover
+ * have a start button
+ * have a end/pause button
+ * Thats all folks with tiger head button
+ * move conductor stick
  */
 /**
  * <h1>Create Random Music!</h1>
@@ -75,8 +80,10 @@ public class NameThatTune1 {
 			StdDraw.setPenRadius(.01);
 			StdDraw.line(100+(map(pitch[i],0,22,50,80))*Math.cos(pitch[i]*10)+9.5, 100+(map(pitch[i],0,22,50,80))*Math.sin(pitch[i]*10), 100+(map(pitch[i],0,22,50,80))*Math.cos(pitch[i]*10)+9.5, 100+(map(pitch[i],0,22,50,80))*Math.sin(pitch[i]*10)+30);
 			StdDraw.setPenRadius(.002);
-			if (Math.cos(pitch[i]*10)>=0) StdDraw.picture(100, 100, "tigerstandright.png");
-			else StdDraw.picture(100, 100, "tigerstandleft.png");
+			if (Math.cos(pitch[i]*10)>=0 && Math.sin(pitch[i]*10)>=0) StdDraw.picture(100, 100, "tigerstandright.png");
+			else if(Math.cos(pitch[i]*10)<=0 && Math.sin(pitch[i]*10)>=0) StdDraw.picture(100, 100, "tigerstandleft.png");
+			else if(Math.cos(pitch[i]*10)<=0 && Math.sin(pitch[i]*10)<=0) StdDraw.picture(100, 100, "tigerstandleftdown.png");
+			else StdDraw.picture(100, 100, "tigerstandrightdown.png");
 			drawNotes(i,duration[i],pitch[i], 250, 150);
 		}
 		StdDraw.show(); 
