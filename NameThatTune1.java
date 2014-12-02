@@ -48,14 +48,8 @@ public class NameThatTune1 {
 			ints[i]=Integer.parseInt(chunks[2]);
 			duration[i]=Double.parseDouble(chunks[3]);
 		}
-		/*
-		Integer pitch[]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,22,0,1,2,3,4,5,6,7,8,9,10};
-		Double basePitch[]={0.1,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.2,0.1,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0};
-		Integer basePitch[]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,22,0,1,2,3,4,5,6,7,8,9,10,11};
-		//Integer pitch[]={12,5,3,15,19,3,12,5,12,7,15,19,3,3,3,19,15,3,17,22,5,3,15,10,12,10,7,5,12,19};
-		Double duration[]={0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375,0.375};
-		 */
-		StdDraw.setCanvasSize(850,500);
+		
+		StdDraw.setCanvasSize(960,500);
 		StdDraw.setXscale(0,430);
 		StdDraw.setYscale(-10,200);
 		for (int i=0;i<pitch.length;i++){
@@ -87,13 +81,14 @@ public class NameThatTune1 {
 			drawNotes(i,duration[i],pitch[i], 250, 150);
 		}
 		StdDraw.show(); 
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.filledRectangle(215, 95, 450, 120);
 		for (int z=0; z<=4; z++){
-			StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
-			StdDraw.filledSquare(100, 100, 110);
-			if(z%4==0) StdDraw.picture(100, 100, "tigerwavingup.png",50,50);
-			if(z%4==1) StdDraw.picture(100, 100, "tigerwaving.png",50,50);
-			if(z%4==2) StdDraw.picture(100, 100, "tigerwavingdown.png",50,50);
-			if(z%4==3) StdDraw.picture(100, 100, "tigerwaving.png",50,50);
+			StdDraw.picture(215, 95, "background1.png",330,210);
+			if(z%4==0) StdDraw.picture(215, 95,  "tigerwavingup.png",80,80);
+			if(z%4==1) StdDraw.picture(215, 95,  "tigerwaving.png",80,80);
+			if(z%4==2) StdDraw.picture(215, 95,  "tigerwavingdown.png",80,80);
+			if(z%4==3) StdDraw.picture(215, 95,  "tigerwaving.png",80,80);
 			StdDraw.show(100); 
 		}
 		int length=0;
