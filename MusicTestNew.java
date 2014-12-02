@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class MusicTestNew {
-	static int notes[] = new int[60];
-	static int basenotes[] = new int[60];
-	static int qualities[] = new int[60];
+	static int notes[] = new int[30];
+	static int basenotes[] = new int[30];
+	static int qualities[] = new int[30];
 	static double time; 
 	static short musickey = 3;
 	static short keyQuality = 0;
