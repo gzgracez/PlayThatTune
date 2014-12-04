@@ -10,7 +10,11 @@ import javax.swing.*;
  * make cover
  * have a start button
  * have a end/pause button
+<<<<<<< HEAD
  * Thats all folks to pop up letters
+=======
+ * Thats all folks with tiger head button
+>>>>>>> FETCH_HEAD
  * move conductor stick
  */
 /**
@@ -30,6 +34,7 @@ public class NameThatTune1 {
 	 */
 
 	public static void main(String[] args) throws IOException{
+<<<<<<< HEAD
 		int lengthCount=0;
 		Integer pitch[]=new Integer[MusicTestNew.noteLength];
 		Integer basePitch[]=new Integer[MusicTestNew.noteLength];
@@ -44,6 +49,25 @@ public class NameThatTune1 {
 			ints[lengthCount]=Integer.parseInt(chunks[2]);
 			duration[lengthCount]=Double.parseDouble(chunks[3]);
 			lengthCount++;
+=======
+		ArrayList<String> orig=new ArrayList<String>();
+		BufferedReader br = new BufferedReader(new FileReader("randomSong.txt"));
+		String line = null;
+		while ((line=br.readLine()) != null) {
+			orig.add(line);
+		}
+		Integer pitch[]=new Integer[orig.size()];
+		//Double volume[]=new Double[orig.size()];
+		Integer basePitch[]=new Integer[orig.size()];
+		Integer ints[]=new Integer[orig.size()];
+		Double duration[]=new Double[orig.size()];
+		for (int i=0;i<orig.size(); i++){
+			String[] chunks = orig.get(i).split(" ");
+			pitch[i]=Integer.parseInt(chunks[0]);
+			basePitch[i]=Integer.parseInt(chunks[1]);
+			ints[i]=Integer.parseInt(chunks[2]);
+			duration[i]=Double.parseDouble(chunks[3]);
+>>>>>>> FETCH_HEAD
 		}
 		
 		StdDraw.setCanvasSize(960,500);

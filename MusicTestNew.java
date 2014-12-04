@@ -5,10 +5,16 @@ import java.io.IOException;
 import java.util.*;
 
 public class MusicTestNew {
+<<<<<<< HEAD
 	public static int noteLength=120;
 	static int notes[] = new int[noteLength];
 	static int basenotes[] = new int[noteLength];
 	static int qualities[] = new int[noteLength];
+=======
+	static int notes[] = new int[30];
+	static int basenotes[] = new int[30];
+	static int qualities[] = new int[30];
+>>>>>>> FETCH_HEAD
 	static double time; 
 	static short musickey = 3;
 	static short keyQuality = 0;
