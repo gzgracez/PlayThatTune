@@ -1,3 +1,14 @@
+
+/*
+ * 
+ * 
+ * 
+ * Notes: make Diminished 	quality in addition to 7th
+ *  	   Delay and Trill methods
+ */
+
+
+
 import java.io.PrintWriter;
 import java.io.File;
 import java.io.IOException;
@@ -5,14 +16,14 @@ import java.util.*;
 
 public class MusicTestNew {
 	public static int noteLength;
-	public static double time =selectDuration(120); 
+	public static double time =selectDuration(60); 
 	static double[] rhythms = genRhythms(time);
 	static int notes[] = new int[noteLength];
 	static int basenotes[] = new int[noteLength];
 	static int qualities[] = new int[noteLength];
 	
-	static short musickey = 9;
-	static short keyQuality = 0;
+	static short musickey = 8;
+	static short keyQuality = 3;
 	static short relmaj = (short)(musickey + keyQuality);
 
 	static short lengthofChorus = 60;
@@ -64,9 +75,9 @@ public class MusicTestNew {
 				interval = (short) (12* (short)(1.5 * Math.random()));
 
 			else if (note == 1)
-				interval = (short)(2 + (12* (short)(1.4 * Math.random())));
+				interval = (short)(2);
 			else if(note == 2)
-				interval = (short)(4 + (12* (short)(1.3 * Math.random())));
+				interval = (short)(4);
 			else if(note == 3)
 				interval = (short)(7);
 			else
@@ -121,9 +132,9 @@ public class MusicTestNew {
 	}
 
 	static int chordQuality(int b) {//b is always negative
-		if(b % 12 == (relmaj % 12)-12|| b % 12 == (relmaj + 5) % 12-12||b % 12 == (musickey + 7) % 12-12) 
+		if(b % 12 == (relmaj % 12)-12|| b % 12 == (relmaj + 5) % 12-12||b % 12 == (relmaj + 7) % 12-12) 
 			return 1;
-		else if(b % 12 == (relmaj -1) % 12-12)
+		else if(b % 12 == (relmaj +11) % 12-12)
 			return 3;
 		else 
 			return 2;
@@ -139,11 +150,11 @@ public class MusicTestNew {
 		double lengths[] = new double[(int)(120/quarterNote)];
 		double totalBeat = 0.0;
 		for(int i = 0; i < lengths.length; i++) {
-			int value = (int)(Math.random() * 3);
+			int value = (int)(Math.random() * 2);
 			if(value == 0) 
 				lengths[i] = quarterNote * 2;
 			else if(value == 1)
-				lengths[i] = quarterNote * 4;
+				lengths[i] = quarterNote;
 			else
 				lengths[i] = quarterNote;
 			totalBeat =totalBeat+ lengths[i];

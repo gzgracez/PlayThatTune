@@ -518,4 +518,23 @@ public class NameThatTune1 {
 
 		return sum(suma, chordtotal, .4, .6);
 	}
+
+	public static double[] delay(int pitch[],int base, double t, double vol) {
+		int new1[]=
+		for (int i=0;i<pitch.length; i++){
+			double[] suma=note(pitch[i]);
+			double[] sumb = note(base,t,vol);
+			double[] sumc = note(base+4,t,vol);
+			double[] sumd = note(base+7,t,vol);
+			double[] chordp1 = sum(sumb, sumc, .5, .5);
+			double[] chordtotal = sum(chordp1, sumd, .67,.33);
+			return sum(suma, chordtotal, .4, .6);
+		}
+		int N = (int) (StdAudio.SAMPLE_RATE * duration);
+		double[] a = new double[N+1];
+		for (int i = 0; i <= N; i++) {
+			a[i] = Math.sin(2 * Math.PI * i * hz / StdAudio.SAMPLE_RATE);
+		}
+		return a; 
+	}
 }
