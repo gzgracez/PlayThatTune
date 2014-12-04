@@ -5,12 +5,17 @@ import java.io.IOException;
 import java.util.*;
 
 public class MusicTestNew {
-	static int notes[] = new int[60];
-	static int basenotes[] = new int[60];
-	static int qualities[] = new int[60];
+	public static int noteLength=120;
+	static int notes[] = new int[noteLength];
+	static int basenotes[] = new int[noteLength];
+	static int qualities[] = new int[noteLength];
 	static double time; 
 	static short musickey = 3;
+	static short keyQuality = 0;
+	static short relmaj = (short)(musickey + keyQuality);
 
+	static short lengthofChorus = 20;
+	static int chorusNotes[] = genChorus(lengthofChorus);
 	public static void main(String[] args) {
 		try{
 			File file = new File("randomSong.txt");
@@ -20,10 +25,11 @@ public class MusicTestNew {
 			time = selectDuration(60);
 			for(int i = 0; i < notes.length; i++) {
 				short pattern = (short)(1.5 * Math.random());
+				
 				if(pattern > 0 && i > 0)
 					notes[i] = notes[i-1];
 				else
-					notes[i] = selectNoteTune(musickey);
+					notes[i] = selectNoteTune(musickey,keyQuality);
 				if(i % 2 == 0) 
 					basenotes[i] = selectNoteBase((short)(notes[i]));
 				else
@@ -38,30 +44,47 @@ public class MusicTestNew {
 			e.printStackTrace();
 		}
 	}
-	static short selectNoteTune(short key) {
+	static short selectNoteTune(short key, short qual) {
 		short note = (short) (5 * Math.random());
 		short interval;
+		if(qual == 0) {
+			if(note ==  0)
+				interval = (short) (12* (short)(1.5 * Math.random()));
 
-		if(note ==  0)
-			interval = (short) (12* (short)(1.5 * Math.random()));
+			else if (note == 1)
+				interval = (short)(2 + (12* (short)(1.4 * Math.random())));
+			else if(note == 2)
+				interval = (short)(4 + (12* (short)(1.3 * Math.random())));
+			else if(note == 3)
+				interval = (short)(7);
+			else
+				interval = (short)(9);
 
-		else if (note == 1)
-			interval = (short)(2 + (12* (short)(1.4 * Math.random())));
-		else if(note == 2)
-			interval = (short)(4 + (12* (short)(1.3 * Math.random())));
-		else if(note == 3)
-			interval = (short)(7);
-		else
-			interval = (short)(9);
+			note = (short)(key + interval);
+		
+		}//major
+		else { 
+			if(note ==  0)
+				interval = (short) (12* (short)(1.5 * Math.random()));
 
-		note = (short)(key + interval);
+			else if (note == 1)
+				interval = (short)(3 + (12* (short)(1.4 * Math.random())));
+			else if(note == 2)
+				interval = (short)(5 + (12* (short)(1.3 * Math.random())));
+			else if(note == 3)
+				interval = (short)(7);
+			else
+				interval = (short)(10);
+
+			note = (short)(key + interval);
+		}//minor
 		return note;
 	}//selectNote
 
 	static short selectNoteBase(int build) {
 		int midindex;
 		int lowindex;
-		if(build % 12 == (musickey +4) % 12|| build % 12 == (musickey + 9) % 12) {
+		if(build % 12 == (relmaj +4) % 12|| build % 12 == (relmaj + 9) % 12) {
 			midindex = 4;
 			lowindex = 3;
 		}//3 and 5
@@ -86,16 +109,13 @@ public class MusicTestNew {
 	}
 
 	static int chordQuality(int b) {//b is always negative
-		if(b % 12 == (musickey % 12)-12|| b % 12 == (musickey + 5) % 12-12||b % 12 == (musickey + 7) % 12-12) 
+		if(b % 12 == (relmaj % 12)-12|| b % 12 == (relmaj + 5) % 12-12||b % 12 == (musickey + 7) % 12-12) 
 			return 1;
-		else if(b % 12 == (musickey -1) % 12-12)
+		else if(b % 12 == (relmaj -1) % 12-12)
 			return 3;
 		else 
 			return 2;
 	}
-
-
-
 
 	static double selectDuration(double bpm) {
 		double rhythm;
@@ -103,4 +123,17 @@ public class MusicTestNew {
 
 		return rhythm;
 	}
-}
+	
+	static int[] genChorus(short chorusLength) {
+		int chorus[] = new int[chorusLength];
+		for(int i = 0; i < chorus.length; i++) {
+			short pattern = (short)(1.5 * Math.random());
+			if(pattern > 0 && i > 0)
+				chorus[i] = chorus[i-1];
+			else
+				chorus[i] = selectNoteTune(musickey,keyQuality);
+		}
+		return chorus;
+	}//chorus
+	
+}//allthings
