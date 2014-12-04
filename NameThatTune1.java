@@ -1,8 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.awt.*; 
-import javax.swing.*;
+import java.util.ArrayList;
 /*
  * ADD VOLUME AS ONE OF THE THINGS TO ENTER
  * Should every note have a chord to go with it?
@@ -10,11 +9,7 @@ import javax.swing.*;
  * make cover
  * have a start button
  * have a end/pause button
-<<<<<<< HEAD
  * Thats all folks to pop up letters
-=======
- * Thats all folks with tiger head button
->>>>>>> FETCH_HEAD
  * move conductor stick
  */
 /**
@@ -23,7 +18,7 @@ import javax.swing.*;
  * <p>
  * @author Grace Z. & David B.
  * @version 1.0
- * @since 2014-11-18
+ * @since 2014-12-3
  */
 public class NameThatTune1 {
 	/**
@@ -34,30 +29,19 @@ public class NameThatTune1 {
 	 */
 
 	public static void main(String[] args) throws IOException{
-<<<<<<< HEAD
-		int lengthCount=0;
-		Integer pitch[]=new Integer[MusicTestNew.noteLength];
-		Integer basePitch[]=new Integer[MusicTestNew.noteLength];
-		Integer ints[]=new Integer[MusicTestNew.noteLength];
-		Double duration[]=new Double[MusicTestNew.noteLength];
-		BufferedReader br = new BufferedReader(new FileReader("randomSong.txt"));
-		String line = null;
-		while ((line=br.readLine()) != null) {
-			String[] chunks = line.split(" ");
-			pitch[lengthCount]=Integer.parseInt(chunks[0]);
-			basePitch[lengthCount]=Integer.parseInt(chunks[1]);
-			ints[lengthCount]=Integer.parseInt(chunks[2]);
-			duration[lengthCount]=Double.parseDouble(chunks[3]);
-			lengthCount++;
-=======
 		ArrayList<String> orig=new ArrayList<String>();
-		BufferedReader br = new BufferedReader(new FileReader("randomSong.txt"));
-		String line = null;
+		//		int lengthCount=0;
+		//		Integer pitch[]=new Integer[MusicTestNew.noteLength];
+		//		Integer basePitch[]=new Integer[MusicTestNew.noteLength];
+		//		Integer ints[]=new Integer[MusicTestNew.noteLength];
+		//		Double duration[]=new Double[MusicTestNew.noteLength];
+		BufferedReader br = new BufferedReader(new FileReader("src/randomSong.txt"));
+		String line;
 		while ((line=br.readLine()) != null) {
+			System.out.println(line);
 			orig.add(line);
 		}
 		Integer pitch[]=new Integer[orig.size()];
-		//Double volume[]=new Double[orig.size()];
 		Integer basePitch[]=new Integer[orig.size()];
 		Integer ints[]=new Integer[orig.size()];
 		Double duration[]=new Double[orig.size()];
@@ -67,9 +51,7 @@ public class NameThatTune1 {
 			basePitch[i]=Integer.parseInt(chunks[1]);
 			ints[i]=Integer.parseInt(chunks[2]);
 			duration[i]=Double.parseDouble(chunks[3]);
->>>>>>> FETCH_HEAD
 		}
-		
 		StdDraw.setCanvasSize(960,500);
 		StdDraw.setXscale(0,430);
 		StdDraw.setYscale(-10,200);
@@ -77,9 +59,7 @@ public class NameThatTune1 {
 			//double[] a = note(pitch[i], duration[i],basePitch[i]);
 			//StdAudio.play(a);
 			//double[] a = majorChord(pitch[i],basePitch[i], duration[i],basePitch[i]);
-			short baseQuality[]=chordIntervals(ints[i]);
-			double[] a = note(pitch[i],basePitch[i],baseQuality, duration[i]);
-			StdAudio.play(a);
+			drawNotes(i,duration[i],pitch[i], 250, 150);
 			StdDraw.setPenRadius(.002);
 			StdDraw.setPenColor((int)(map(duration[i],0,2,0,255)),168+(int)(map(duration[i],0.0f,2.0f,0.0f,86.0f)),255);
 			StdDraw.filledSquare(100, 100, 110);
@@ -87,7 +67,7 @@ public class NameThatTune1 {
 			StdDraw.setPenColor(StdDraw.BLACK); 
 			for (int r=40; r<=100; r+=20) StdDraw.circle(100, 100, r);
 
-			StdDraw.setPenColor(0,(int)map(pitch[i],0,22,100,255),100);
+			StdDraw.setPenColor(0,(int)map(pitch[i],0,22,100,200),100);
 			StdDraw.circle(100, 100, (map(pitch[i],0,22,50,80)));
 			//StdDraw.setPenColor(StdDraw.RED); 
 			//StdDraw.filledCircle(100+50*Math.cos(pitch[i]*10), 100+50*Math.sin(pitch[i]*10), 20);
@@ -99,7 +79,9 @@ public class NameThatTune1 {
 			else if(Math.cos(pitch[i]*10)<=0 && Math.sin(pitch[i]*10)>=0) StdDraw.picture(100, 100, "tigerstandleft.png");
 			else if(Math.cos(pitch[i]*10)<=0 && Math.sin(pitch[i]*10)<=0) StdDraw.picture(100, 100, "tigerstandleftdown.png");
 			else StdDraw.picture(100, 100, "tigerstandrightdown.png");
-			drawNotes(i,duration[i],pitch[i], 250, 150);
+			short baseQuality[]=chordIntervals(ints[i]);
+			double[] a = note(pitch[i],basePitch[i],baseQuality, duration[i]);
+			StdAudio.play(a);
 		}
 		StdDraw.show(); 
 		StdDraw.setPenColor(StdDraw.WHITE);
@@ -158,16 +140,18 @@ public class NameThatTune1 {
 	 * @return Nothing
 	 */
 	public static void drawNotes(int i, double duration, int pitch, float startX, float startY){
-		Integer notePos[]={0,0,1,2,2,3,3,4,5,5,6,6,0,0,1,2,2,3,3,4,5,5,6};//23, 0-22
+		Integer notePos[]={0,0,1,2,2,3,3,4,5,5,6,6,0,0,1,2,2,3,3,4,5,5,6,6,7,7};//26, 0-25
 		//startX=225;
 		//startY=(float)50;
 		int topBotDiff=45;
 		int dist=12;
-		String notePic="quarternote.png";
+		String notePic="quarternote";
+		if (duration==0.5) notePic="halfnote";
+		else if (duration==1.0) notePic="wholenote";
 
 		if (i%30==0){
 			StdDraw.setPenColor(StdDraw.WHITE); 
-			StdDraw.filledRectangle(startX+75, startY-12.5, 100, 45);
+			StdDraw.filledRectangle(startX+75, startY-12.5, 100, 60);
 		}
 		StdDraw.setPenColor(StdDraw.BLACK); 
 		StdDraw.line(startX-25, startY+12.5, startX-25, startY-7.5);
@@ -184,7 +168,7 @@ public class NameThatTune1 {
 
 		if (i%30<15){//top
 			if (pitch<2){
-				notePic="quarternote.png";
+				notePic+="up.png";
 				if (pitch==0){
 					StdDraw.picture(startX+dist*(i%15), startY+5, notePic,8,14);
 				}
@@ -195,31 +179,36 @@ public class NameThatTune1 {
 			}
 			else if (pitch==2 || pitch==3 || pitch==5 || pitch==7 || 
 					pitch==8 || pitch==10){
-				notePic="quarternotedown.png";
+				notePic+="down.png";
 				StdDraw.picture(startX+dist*(i%15), startY-5+2.5*notePos[pitch], notePic,8,14);
 			}
 			else if (pitch==12 || pitch==14 || pitch==15 || pitch==17 || pitch==19 || 
 					pitch==20 || pitch==22){
-				notePic="quarternotedown.png";
-				for(double b=startY+12.5;b<=(startY+17.5+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+				notePic+="down.png";
 				StdDraw.picture(startX+dist*(i%15), startY-5+17.5+2.5*notePos[pitch], notePic,8,14);
+				for(double b=startY+12.5;b<=(startY+17.5+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+			}
+			else if (pitch==24 || pitch==25){
+				notePic+="down.png";
+				StdDraw.picture(startX+dist*(i%15), startY-5+17.5+2.5*notePos[pitch], notePic,8,14);
+				for(double b=startY+12.5;b<=(startY+35+2.5*(notePos[pitch-24]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
 			}
 			else if (pitch==4 || pitch==6 || pitch==9 || pitch==11){
-				notePic="quarternotedown.png";
+				notePic+="down.png";
 				StdDraw.text(startX-4+dist*(i%15), startY-.5+2.5*notePos[pitch], "\u0023");
 				StdDraw.picture(startX+.5+dist*(i%15), startY-5+2.5*notePos[pitch], notePic,8,14);
 			}
 			else if (pitch==13 || pitch==16 || pitch==18 || pitch==21 || pitch==23){
-				notePic="quarternotedown.png";
-				for(double b=startY+12.5;b<=(startY+17.5+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+				notePic+="down.png";
 				StdDraw.text(startX-4+dist*(i%15), startY-.5+17.5+2.5*notePos[pitch], "\u0023");
 				StdDraw.picture(startX+.5+dist*(i%15), startY-5+17.5+2.5*notePos[pitch], notePic,8,14);
+				for(double b=startY+12.5;b<=(startY+17.5+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
 			}
 		}
 
 		else if (i%30<30){//bottom
 			if (pitch<2){
-				notePic="quarternote.png";
+				notePic+="up.png";
 				if (pitch==0){
 					StdDraw.picture(startX+dist*(i%15), startY-topBotDiff+5, notePic,8,14);
 				}
@@ -230,32 +219,32 @@ public class NameThatTune1 {
 			}
 			else if (pitch==2 || pitch==3 || pitch==5 || pitch==7 || 
 					pitch==8 || pitch==10){
-				notePic="quarternotedown.png";
+				notePic+="down.png";
 				StdDraw.picture(startX+dist*(i%15), startY-5-topBotDiff+2.5*notePos[pitch], notePic,8,14);
 			}
 			else if (pitch==12 || pitch==14 || pitch==15 || pitch==17 || pitch==19 || 
 					pitch==20 || pitch==22){
-				notePic="quarternotedown.png";
-				for(double b=startY-32.5;b<=(startY-27.5+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+				notePic+="down.png";
 				StdDraw.picture(startX+dist*(i%15), startY-5+17.5-topBotDiff+2.5*notePos[pitch], notePic,8,14);
+				for(double b=startY-32.5;b<=(startY-27.5+2.5*(notePos[pitch]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+			}
+			else if (pitch==24 || pitch==25){
+				notePic+="down.png";
+				StdDraw.picture(startX+dist*(i%15), startY-5+17.5-topBotDiff+2.5*notePos[pitch], notePic,8,14);
+				for(double b=startY-32.5;b<=(startY-10+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
 			}
 			else if (pitch==4 || pitch==6 || pitch==9 || pitch==11){
-				notePic="quarternotedown.png";
+				notePic+="down.png";
 				StdDraw.text(startX-4+dist*(i%15), startY-.5-topBotDiff+2.5*notePos[pitch], "\u0023");
 				StdDraw.picture(startX+.5+dist*(i%15), startY-5-topBotDiff+2.5*notePos[pitch], notePic,8,14);
 			}
 			else if (pitch==13 || pitch==16 || pitch==18 || pitch==21 || pitch==23){
-				notePic="quarternotedown.png";
-				for(double b=startY-32.5;b<=(startY-27.5+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
+				notePic+="down.png";
 				StdDraw.text(startX-4+dist*(i%15), startY-.5+17.5-topBotDiff+2.5*notePos[pitch], "\u0023");
 				StdDraw.picture(startX+.5+dist*(i%15), startY-5+17.5-topBotDiff+2.5*notePos[pitch], notePic,8,14);
+				for(double b=startY-32.5;b<=(startY-27.5+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
 			}
 		}
-		//			StdDraw.line(0, -75, 0, -95);
-		//			for (int a=-75;a>-100; a-=5){
-		//				StdDraw.line(0, a, 200, a);
-		//			}
-		//			StdDraw.picture(10, -85, "bass.png",15,20);
 		StdDraw.show(20); 
 	}
 

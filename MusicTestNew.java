@@ -1,49 +1,55 @@
-import java.io.BufferedWriter;
+import java.io.PrintWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
 public class MusicTestNew {
-<<<<<<< HEAD
-	public static int noteLength=120;
+	public static int noteLength;
+	public static double time =selectDuration(120); 
+	static double[] rhythms = genRhythms(time);
 	static int notes[] = new int[noteLength];
 	static int basenotes[] = new int[noteLength];
 	static int qualities[] = new int[noteLength];
-=======
-	static int notes[] = new int[30];
-	static int basenotes[] = new int[30];
-	static int qualities[] = new int[30];
->>>>>>> FETCH_HEAD
-	static double time; 
-	static short musickey = 3;
+	
+	static short musickey = 9;
 	static short keyQuality = 0;
 	static short relmaj = (short)(musickey + keyQuality);
 
-	static short lengthofChorus = 20;
+	static short lengthofChorus = 60;
 	static int chorusNotes[] = genChorus(lengthofChorus);
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException{
 		try{
-			File file = new File("randomSong.txt");
-			file.createNewFile();
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-			time = selectDuration(60);
+			File file = new File("src/randomSong.txt");
+			file.getParentFile().mkdirs();
+			PrintWriter bw = new PrintWriter(file);
+			
 			for(int i = 0; i < notes.length; i++) {
-				short pattern = (short)(1.5 * Math.random());
+				short pattern1 = (short)(1.5 * Math.random());
+				short basepattern = (short)(1.5 * Math.random());
+				int noteCounter = 0;
 				
-				if(pattern > 0 && i > 0)
+				if(i < lengthofChorus)
+					notes[i] = chorusNotes[i];
+				else if(i >= notes.length - lengthofChorus)
+					notes[i] = chorusNotes[i - lengthofChorus- (notes.length - 2*lengthofChorus)];
+				else if(pattern1 > 0 && i > 0 && noteCounter < 4) {
 					notes[i] = notes[i-1];
-				else
+					noteCounter = 0;
+				}
+				else {
 					notes[i] = selectNoteTune(musickey,keyQuality);
-				if(i % 2 == 0) 
+					noteCounter = noteCounter + 1;
+				}
+				if(i >= basenotes.length - lengthofChorus)
+					basenotes[i] = basenotes[i - lengthofChorus- (basenotes.length - 2*lengthofChorus)];
+				else if(basepattern == 0 || i == 0) 
 					basenotes[i] = selectNoteBase((short)(notes[i]));
 				else
 					basenotes[i] = basenotes[i-1];
 				qualities[i] = chordQuality(basenotes[i]);
 
-				System.out.println(notes[i] + " "+basenotes[i] + " "+qualities[i] +" "+  time);
-				bw.write(notes[i] + " "+basenotes[i] + " "+qualities[i] +" "+  time + "\n");
+				System.out.println(notes[i] + " "+basenotes[i] + " "+qualities[i] +" "+  rhythms[i]);
+				bw.println(notes[i] + " "+basenotes[i] + " "+qualities[i] +" "+  rhythms[i]);
 			}
 			bw.close();
 		}catch (IOException e) {
@@ -74,9 +80,9 @@ public class MusicTestNew {
 				interval = (short) (12* (short)(1.5 * Math.random()));
 
 			else if (note == 1)
-				interval = (short)(3 + (12* (short)(1.4 * Math.random())));
+				interval = (short)(3 + (12* (short)(1.2 * Math.random())));
 			else if(note == 2)
-				interval = (short)(5 + (12* (short)(1.3 * Math.random())));
+				interval = (short)(5 + (12* (short)(1.1 * Math.random())));
 			else if(note == 3)
 				interval = (short)(7);
 			else
@@ -126,15 +132,37 @@ public class MusicTestNew {
 	static double selectDuration(double bpm) {
 		double rhythm;
 		rhythm = (double)(15/bpm);
-
+		//System.out.println(rhythm);
 		return rhythm;
+	}
+	static double[] genRhythms(double quarterNote) {
+		double lengths[] = new double[(int)(120/quarterNote)];
+		double totalBeat = 0.0;
+		for(int i = 0; i < lengths.length; i++) {
+			int value = (int)(Math.random() * 3);
+			if(value == 0) 
+				lengths[i] = quarterNote * 2;
+			else if(value == 1)
+				lengths[i] = quarterNote * 4;
+			else
+				lengths[i] = quarterNote;
+			totalBeat =totalBeat+ lengths[i];
+			if(totalBeat >= 120 && totalBeat <= 124) {
+				noteLength = i;
+				//System.out.println(i);
+				return lengths;
+			}
+				
+		}
+		return lengths;
 	}
 	
 	static int[] genChorus(short chorusLength) {
 		int chorus[] = new int[chorusLength];
+		int noteCounter = 0;
 		for(int i = 0; i < chorus.length; i++) {
 			short pattern = (short)(1.5 * Math.random());
-			if(pattern > 0 && i > 0)
+			if(pattern > 0 && i > 0 && noteCounter < 4)
 				chorus[i] = chorus[i-1];
 			else
 				chorus[i] = selectNoteTune(musickey,keyQuality);
