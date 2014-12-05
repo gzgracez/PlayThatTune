@@ -46,22 +46,24 @@ public class NameThatTune1 {
 			ints[i]=Integer.parseInt(chunks[2]);
 			duration[i]=Double.parseDouble(chunks[3]);
 		}
-		double[]a=delay(pitch,duration,ints,basePitch);
-		StdAudio.play(a);
+		//double[]a=delay(pitch,duration,ints,basePitch);
+		//StdAudio.play(a);
 		StdDraw.setCanvasSize(960,500);
 		StdDraw.setXscale(0,430);
 		StdDraw.setYscale(-10,200);
 		for (int i=0;i<pitch.length;i++){
-			drawNotes(i,duration[i],pitch[i], 250, 150);
+			short trillVariable = (short)(Math.random()*25);
+			drawNotes(i,duration[i],pitch[i], 250, 150, trillVariable);
 			drawTiger(pitch[i],duration[i]);
 			short baseQuality[]=chordIntervals(ints[i]);
-			short trillVariable = (short)(Math.random()*25);
+			//double a[]=saveTrill(pitch[i],basePitch[i],baseQuality, duration[i]);
+			//StdAudio.play(a);
 			trill[i]=trillVariable;
-			if(trillVariable == 0)
+			if(trillVariable == 1)
 				Trill(pitch[i],basePitch[i],baseQuality, duration[i]);
 			else {
-				//double[] a = note(pitch[i],basePitch[i],baseQuality, duration[i]);
-				//StdAudio.play(a);
+				double[] a = note(pitch[i],basePitch[i],baseQuality, duration[i]);
+				StdAudio.play(a);
 			}
 		}
 		StdDraw.show(); 
@@ -83,19 +85,24 @@ public class NameThatTune1 {
 		}
 		double finalNotes[]=new double[length];
 		int count=0;
-		/*for (int z=0; z<pitch.length;z++){
+		for (int z=0; z<pitch.length;z++){
 			short baseQuality[]=chordIntervals(ints[z]);
 			if(trill[z] == 0){
-				double[] b=Trill(pitch[z],basePitch[z],baseQuality, duration[z]);
-			}else {
-				double[] b = note(pitch[z],basePitch[z],baseQuality, duration[z]);
+				double tempNotes[]=saveTrill(pitch[z],basePitch[z],baseQuality, duration[z]);
+				for(int y=0; y<StdAudio.SAMPLE_RATE*duration[z];y++){
+					finalNotes[count]=tempNotes[y];
+					System.out.println(tempNotes[y]);
+					count++;
+				}
 			}
-			//double[] b = majorChord(pitch[z],basePitch[z], duration[z],basePitch[z]);
-			for(int y=0; y<StdAudio.SAMPLE_RATE*duration[z];y++){
-				finalNotes[count]=b[y];
-				count++;
+			else {
+				double tempNotes[]=note(pitch[z],basePitch[z],baseQuality, duration[z]);
+				for(int y=0; y<StdAudio.SAMPLE_RATE*duration[z];y++){
+					finalNotes[count]=tempNotes[y];
+					count++;
+				}
 			}
-		}*/
+		}
 		StdAudio.save("final.wav",finalNotes);
 
 		System.exit(0);
@@ -125,7 +132,7 @@ public class NameThatTune1 {
 	 * @param startY This is the center Y-position of the sheet music
 	 * @return Nothing
 	 */
-	public static void drawNotes(int i, double duration, int pitch, float startX, float startY){
+	public static void drawNotes(int i, double duration, int pitch, float startX, float startY, int trill){
 		Integer notePos[]={0,0,1,2,2,3,3,4,5,5,6,6,0,0,1,2,2,3,3,4,5,5,6,6,7,7};//26, 0-25
 		//startX=225;
 		//startY=(float)50;
@@ -154,6 +161,9 @@ public class NameThatTune1 {
 
 		if (i%30<15){//top
 			if (pitch<2){
+				if (trill==1){
+					StdDraw.picture(startX+dist*(i%15)+1, startY+15, "trill.png",8,4);
+				}
 				notePic+="up.png";
 				if (pitch==0){
 					StdDraw.picture(startX+dist*(i%15), startY+5, notePic,8,14);
@@ -165,26 +175,41 @@ public class NameThatTune1 {
 			}
 			else if (pitch==2 || pitch==3 || pitch==5 || pitch==7 || 
 					pitch==8 || pitch==10){
+				if (trill==1){
+					StdDraw.picture(startX+dist*(i%15)+1, startY+5+2.5*notePos[pitch], "trill.png",8,4);
+				}
 				notePic+="down.png";
 				StdDraw.picture(startX+dist*(i%15), startY-5+2.5*notePos[pitch], notePic,8,14);
 			}
 			else if (pitch==12 || pitch==14 || pitch==15 || pitch==17 || pitch==19 || 
 					pitch==20 || pitch==22){
+				if (trill==1){
+					StdDraw.picture(startX+dist*(i%15)+1, startY+5+17.5+2.5*notePos[pitch], "trill.png",8,4);
+				}
 				notePic+="down.png";
 				StdDraw.picture(startX+dist*(i%15), startY-5+17.5+2.5*notePos[pitch], notePic,8,14);
 				for(double b=startY+12.5;b<=(startY+17.5+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
 			}
 			else if (pitch==24 || pitch==25){
+				if (trill==1){
+					StdDraw.picture(startX+dist*(i%15)+1, startY+5+17.5+2.5*notePos[pitch], "trill.png",8,4);
+				}
 				notePic+="down.png";
 				StdDraw.picture(startX+dist*(i%15), startY-5+17.5+2.5*notePos[pitch], notePic,8,14);
 				for(double b=startY+12.5;b<=(startY+35+2.5*(notePos[pitch-24]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
 			}
 			else if (pitch==4 || pitch==6 || pitch==9 || pitch==11){
+				if (trill==1){
+					StdDraw.picture(startX+dist*(i%15)+1, startY+5+2.5*notePos[pitch], "trill.png",8,4);
+				}
 				notePic+="down.png";
 				StdDraw.text(startX-4+dist*(i%15), startY-.5+2.5*notePos[pitch], "\u0023");
 				StdDraw.picture(startX+.5+dist*(i%15), startY-5+2.5*notePos[pitch], notePic,8,14);
 			}
 			else if (pitch==13 || pitch==16 || pitch==18 || pitch==21 || pitch==23){
+				if (trill==1){
+					StdDraw.picture(startX+dist*(i%15)+1, startY+5+17.5+2.5*notePos[pitch], "trill.png",8,4);
+				}
 				notePic+="down.png";
 				StdDraw.text(startX-4+dist*(i%15), startY-.5+17.5+2.5*notePos[pitch], "\u0023");
 				StdDraw.picture(startX+.5+dist*(i%15), startY-5+17.5+2.5*notePos[pitch], notePic,8,14);
@@ -194,6 +219,9 @@ public class NameThatTune1 {
 
 		else if (i%30<30){//bottom
 			if (pitch<2){
+				if (trill==1){
+					StdDraw.picture(startX+dist*(i%15)+1, startY-topBotDiff+15, "trill.png",8,4);
+				}
 				notePic+="up.png";
 				if (pitch==0){
 					StdDraw.picture(startX+dist*(i%15), startY-topBotDiff+5, notePic,8,14);
@@ -205,26 +233,41 @@ public class NameThatTune1 {
 			}
 			else if (pitch==2 || pitch==3 || pitch==5 || pitch==7 || 
 					pitch==8 || pitch==10){
+				if (trill==1){
+					StdDraw.picture(startX+dist*(i%15)+1, startY+5-topBotDiff+2.5*notePos[pitch], "trill.png",8,4);
+				}
 				notePic+="down.png";
 				StdDraw.picture(startX+dist*(i%15), startY-5-topBotDiff+2.5*notePos[pitch], notePic,8,14);
 			}
 			else if (pitch==12 || pitch==14 || pitch==15 || pitch==17 || pitch==19 || 
 					pitch==20 || pitch==22){
+				if (trill==1){
+					StdDraw.picture(startX+dist*(i%15)+1, startY+5+17.5-topBotDiff+2.5*notePos[pitch], "trill.png",8,4);
+				}
 				notePic+="down.png";
 				StdDraw.picture(startX+dist*(i%15), startY-5+17.5-topBotDiff+2.5*notePos[pitch], notePic,8,14);
 				for(double b=startY-32.5;b<=(startY-27.5+2.5*(notePos[pitch]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
 			}
 			else if (pitch==24 || pitch==25){
+				if (trill==1){
+					StdDraw.picture(startX+dist*(i%15)+1, startY+5+17.5-topBotDiff+2.5*notePos[pitch], "trill.png",8,4);
+				}
 				notePic+="down.png";
 				StdDraw.picture(startX+dist*(i%15), startY-5+17.5-topBotDiff+2.5*notePos[pitch], notePic,8,14);
 				for(double b=startY-32.5;b<=(startY-10+2.5*(notePos[pitch-12]));b+=5) StdDraw.line(startX-5+dist*(i%15), b, startX+5+dist*(i%15), b);
 			}
 			else if (pitch==4 || pitch==6 || pitch==9 || pitch==11){
+				if (trill==1){
+					StdDraw.picture(startX+dist*(i%15)+1, startY+5-topBotDiff+2.5*notePos[pitch], "trill.png",8,4);
+				}
 				notePic+="down.png";
 				StdDraw.text(startX-4+dist*(i%15), startY-.5-topBotDiff+2.5*notePos[pitch], "\u0023");
 				StdDraw.picture(startX+.5+dist*(i%15), startY-5-topBotDiff+2.5*notePos[pitch], notePic,8,14);
 			}
 			else if (pitch==13 || pitch==16 || pitch==18 || pitch==21 || pitch==23){
+				if (trill==1){
+					StdDraw.picture(startX+dist*(i%15)+1, startY+5+17.5-topBotDiff+2.5*notePos[pitch], "trill.png",8,4);
+				}
 				notePic+="down.png";
 				StdDraw.text(startX-4+dist*(i%15), startY-.5+17.5-topBotDiff+2.5*notePos[pitch], "\u0023");
 				StdDraw.picture(startX+.5+dist*(i%15), startY-5+17.5-topBotDiff+2.5*notePos[pitch], notePic,8,14);
@@ -249,9 +292,7 @@ public class NameThatTune1 {
 		for (int r=40; r<=100; r+=20) StdDraw.circle(100, 100, r);
 
 		StdDraw.setPenColor(0,(int)map(pitch,0,22,100,200),100);
-		StdDraw.circle(100, 100, (map(pitch,0,22,50,150)));
-		//StdDraw.setPenColor(StdDraw.RED); 
-		//StdDraw.filledCircle(100+50*Math.cos(pitch*10), 100+50*Math.sin(pitch*10), 20);
+		StdDraw.circle(100, 100, (map(pitch,0,22,50,80)));
 		StdDraw.filledCircle(100+(map(pitch,0,22,50,80))*Math.cos(pitch*10), 100+(map(pitch,0,22,50,80))*Math.sin(pitch*10), 10);
 		StdDraw.setPenRadius(.01);
 		StdDraw.line(100+(map(pitch,0,22,50,80))*Math.cos(pitch*10)+9.5, 100+(map(pitch,0,22,50,80))*Math.sin(pitch*10), 100+(map(pitch,0,22,50,80))*Math.cos(pitch*10)+9.5, 100+(map(pitch,0,22,50,80))*Math.sin(pitch*10)+30);
@@ -282,18 +323,38 @@ public class NameThatTune1 {
 				StdAudio.play(trillNote);
 		}
 	}
-	
-	public static void saveTrill(int a, int base, short[] ints, double t){
-		double trill = MusicTestNew.time/4;
+
+	/**
+	 * 
+	 * @param a
+	 * @param base
+	 * @param ints
+	 * @param t
+	 */
+	public static double[] saveTrill(int a, int base, short[] ints, double t){
+		int cnt=0;
+		int length=(int)(t*StdAudio.SAMPLE_RATE);
+		double notes[]=new double[length];
+		double trill = 1/16;
 		double[] originalNote = note(a,base, ints, trill);
 		double[] trillNote = note(a+1,base, ints, trill);
-
+		//System.out.println((t/MusicTestNew.time)*4);
 		for(int i = 0; i < (t/MusicTestNew.time)*4;i++) {
 			if(i % 2 == 0)
-				StdAudio.play(originalNote);
+				for(int z=0;z<originalNote.length;z++){
+					notes[cnt]=originalNote[z];
+					System.out.println(cnt);
+					cnt+=1;
+				}
 			else
-				StdAudio.play(trillNote);
+				for(int z=0;z<trillNote.length;z++){
+					notes[cnt]=trillNote[z];
+					System.out.println(cnt);
+					cnt+=1;
+				}
+			//System.out.println(notes[count]);
 		}
+		return notes;
 	}
 
 	/**
@@ -602,16 +663,5 @@ public class NameThatTune1 {
 		}
 		double []a=sum(new1,new2,0.5,0.5);
 		return a;
-		/*
-		for (int i=0;i<StdAudio.SAMPLE_RATE * duration[0];i++){
-			new1[i]=Math.sin(2 * Math.PI * i * pitch[i] / StdAudio.SAMPLE_RATE);
-			new2[i]=0;
-		}
-		int count=(int)(StdAudio.SAMPLE_RATE * duration[0]);
-		for (int n=0;n<pitch.length;n++){
-			for (int i=(int)(StdAudio.SAMPLE_RATE * duration[0]);i<length; i++){
-
-			}
-		}*/
 	}
 }

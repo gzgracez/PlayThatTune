@@ -26,7 +26,7 @@ public class MusicTestNew {
 	static short keyQuality = 0;
 	static short relmaj = (short)(musickey + keyQuality);
 
-	static short lengthofChorus = 60;
+	static short lengthofChorus = 15;
 	static int chorusNotes[] = genChorus(lengthofChorus);
 	public static void main(String[] args) throws IOException{
 		try{
