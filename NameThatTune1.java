@@ -11,21 +11,23 @@ import java.util.ArrayList;
  * Thats all folks to pop up letters
  * move conductor stick
  */
+
 /**
  * <h1>Create Random Music!</h1>
- * The NameThatTune1 outputs randomly generated music and a dynamically generated visualization
+ * The NameThatTune1 plays randomly generated music from a text file and displays a dynamically generated visualization
  * <p>
- * @author Grace Z. & David B.
+ * @author Grace Zhang & David Burgstahler
  * @version 1.0
  * @since 2014-12-4
  */
+
 public class NameThatTune1 {
+	
 	/**
 	 * This is the main method which makes use of different music and visualization methods
 	 * @param None
-	 * @return Nothing
+	 * @throws IOException
 	 */
-
 	public static void main(String[] args) throws IOException{
 		ArrayList<String> orig=new ArrayList<String>();
 		BufferedReader br = new BufferedReader(new FileReader("src/randomSong.txt"));
@@ -305,11 +307,11 @@ public class NameThatTune1 {
 	}
 
 	/**
-	 * 
-	 * @param a
-	 * @param base
-	 * @param ints
-	 * @param t
+	 * This method generates and plays the notes in a trill
+	 * @param a This is the melody of the note
+	 * @param base This is the base of the chord
+	 * @param ints This is an array of the intervals of the chord
+	 * @param t This is the duration of the note
 	 */
 	public static void Trill(int a, int base, short[] ints, double t){
 		double trill = MusicTestNew.time/4;
