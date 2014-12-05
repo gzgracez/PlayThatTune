@@ -78,7 +78,7 @@ public class MusicTestNew {
 	short keyselect = 0;
 	for(int i = 0; i < keys.length; i++) {
 		short numGen = (short)(Math.random()*keys.length);	
-		keyselect = keys[i];
+		keyselect = keys[numGen];
 	
 	}
 	return keyselect;
