@@ -15,15 +15,15 @@ import java.io.IOException;
 import java.util.*;
 
 public class MusicTestNew {
-	public static int noteLength;
+	public static int noteLength=30;
 	public static double time =selectDuration(60); 
 	static double[] rhythms = genRhythms(time);
 	static int notes[] = new int[noteLength];
 	static int basenotes[] = new int[noteLength];
 	static int qualities[] = new int[noteLength];
 	
-	static short musickey = 8;
-	static short keyQuality = 3;
+	static short musickey = 1;
+	static short keyQuality = 0;
 	static short relmaj = (short)(musickey + keyQuality);
 
 	static short lengthofChorus = 60;
@@ -158,11 +158,11 @@ public class MusicTestNew {
 			else
 				lengths[i] = quarterNote;
 			totalBeat =totalBeat+ lengths[i];
-			if(totalBeat >= 120 && totalBeat <= 124) {
+			/*if(totalBeat >= 120 && totalBeat <= 124) {
 				noteLength = i;
 				//System.out.println(i);
 				return lengths;
-			}
+			}*/
 				
 		}
 		return lengths;
