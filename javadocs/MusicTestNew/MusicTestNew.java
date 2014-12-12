@@ -31,7 +31,6 @@ public class MusicTestNew {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException{
-		try{
 			File file = new File("src/randomSong.txt");
 			file.getParentFile().mkdirs();
 			PrintWriter bw = new PrintWriter(file);
@@ -65,9 +64,6 @@ public class MusicTestNew {
 				bw.println(notes[i] + " "+basenotes[i] + " "+qualities[i] +" "+  rhythms[i]);
 			}
 			bw.close();
-		}catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	/**
 	 * This method generates the key of the music from a select number of keys
@@ -78,7 +74,7 @@ public class MusicTestNew {
 	short keyselect = 0;
 	for(int i = 0; i < keys.length; i++) {
 		short numGen = (short)(Math.random()*keys.length);	
-		keyselect = keys[i];
+		keyselect = keys[numGen];
 	
 	}
 	return keyselect;
@@ -179,7 +175,6 @@ public class MusicTestNew {
 	public static double selectDuration(double bpm) {
 		double rhythm;
 		rhythm = (double)(15/bpm);
-		//System.out.println(rhythm);
 		return rhythm;
 	}
 	/**
@@ -201,7 +196,6 @@ public class MusicTestNew {
 			totalBeat =totalBeat+ lengths[i];
 			if(totalBeat >= 130 && totalBeat <= 134) {
 				noteLength = i;
-				//System.out.println(i);
 				return lengths;
 			}
 				

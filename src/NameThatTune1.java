@@ -1,3 +1,14 @@
+/* This program reads in a text file that contains the pitch, basePitch, chord type, and duration of different notes
+ * and uses these values to both play the note and possibly different chords that go with it. This program also displays
+ * a dynamically generated visualization of the music by using the pitch to determine the location (on a polar coordinate system)
+ * and shade of green of a note on the screen and uses the note's duration to determine the shade of blue of the background (Uses
+ * the map method to make sure that color doesn't exceed 255 and position is within the screen). 
+ * A tiger conducts this note in the center of the circle and directs its baton to point in the direction of the note around it (Based
+ * on the x-y coordinates of the note around it). The actual sheet music is drawn as the music plays, each note (an image of a note) appearing
+ * as it is heard. This is based on determining exactly what position the note should be on the staff, whether it is a sharp, and 
+ * whether the note should have a trill symbol on top of it. The sheet music resets after the two lines of music are filled with notes.s
+ */
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -7,9 +18,9 @@ import java.util.ArrayList;
  * <h1>Create Random Music!</h1>
  * The NameThatTune1 program plays randomly generated music from a text file and displays a dynamically generated visualization
  * <p>
- * @author Grace Zhang & David Burgstahler
+ * @author Grace Z. & David B.
  * @version 1.0
- * @since 2014-12-4
+ * @since 2014-12-5
  */
 
 public class NameThatTune1 {
@@ -27,6 +38,7 @@ public class NameThatTune1 {
 			System.out.println(line);
 			orig.add(line);
 		}
+		br.close();
 		int pitch[]=new int[orig.size()];
 		int basePitch[]=new int[orig.size()];
 		int ints[]=new int[orig.size()];
@@ -39,19 +51,21 @@ public class NameThatTune1 {
 			ints[i]=Integer.parseInt(chunks[2]);
 			duration[i]=Double.parseDouble(chunks[3]);
 		}
+
 		//double[]a=delay(pitch,duration,ints,basePitch);
 		//StdAudio.play(a);
 		StdDraw.setCanvasSize(960,500);
 		StdDraw.setXscale(0,430);
 		StdDraw.setYscale(-10,200);
 		for (int i=0;i<pitch.length;i++){
-			short trillVariable = (short)(Math.random()*25+1);
+			short trillVariable = (short)(Math.random()*15+1);
 			drawNotes(i,duration[i],pitch[i], 250, 150, trillVariable);
 			drawTiger(pitch[i],duration[i]);
 			short baseQuality[]=chordIntervals(ints[i]);
 			trill[i]=trillVariable;
-			if(trillVariable == 1)
+			if(trillVariable == 1) {
 				Trill(pitch[i],basePitch[i],baseQuality, duration[i]);
+			}
 			else {
 				double[] a = note(pitch[i],basePitch[i],baseQuality, duration[i], 1);
 				StdAudio.play(a);
@@ -60,7 +74,7 @@ public class NameThatTune1 {
 		StdDraw.show(); 
 		StdDraw.setPenColor(StdDraw.WHITE);
 		StdDraw.filledRectangle(215, 95, 450, 120);
-		for (int z=0; z<=10; z++){
+		for (int z=0; z<=orig.size()/25; z++){
 			StdDraw.picture(215, 95, "background1.png",330,210);
 			if(z%4==0) StdDraw.picture(215, 95,  "tigerwavingup.png",80,80);
 			if(z%4==1) StdDraw.picture(215, 95,  "tigerwaving.png",80,80);
@@ -78,13 +92,22 @@ public class NameThatTune1 {
 		int count=0;
 		for (int z=0; z<pitch.length;z++){
 			short baseQuality[]=chordIntervals(ints[z]);
-			double tempNotes[]=note(pitch[z],basePitch[z],baseQuality, duration[z], 1);
-			for(int y=0; y<StdAudio.SAMPLE_RATE*duration[z];y++){
-				finalNotes[count]=tempNotes[y];
-				count++;
+			if(trill[z] == 1){
+				double tempNotes[]=saveTrill(pitch[z],basePitch[z],baseQuality, duration[z]);
+				for(int y=0; y<StdAudio.SAMPLE_RATE*duration[z];y++){
+					finalNotes[count]=tempNotes[y];
+					count++;
+				}
+			}
+			else {
+				double tempNotes[]=note(pitch[z],basePitch[z],baseQuality, duration[z], 1);
+				for(int y=0; y<StdAudio.SAMPLE_RATE*duration[z];y++){
+					finalNotes[count]=tempNotes[y];
+					count++;
+				}
 			}
 		}
-		StdAudio.save("final.wav",finalNotes);
+		StdAudio.save("finalRandomSong.wav",finalNotes);
 
 		System.exit(0);
 	} 
@@ -115,8 +138,6 @@ public class NameThatTune1 {
 	 */
 	public static void drawNotes(int i, double duration, int pitch, float startX, float startY, int trill){
 		Integer notePos[]={0,0,1,2,2,3,3,4,5,5,6,6,0,0,1,2,2,3,3,4,5,5,6,6,7,7};//26, 0-25
-		//startX=225;
-		//startY=(float)50;
 		int topBotDiff=45;
 		int dist=12;
 		String notePic="quarternote";
@@ -276,7 +297,7 @@ public class NameThatTune1 {
 		StdDraw.circle(100, 100, (map(pitch,0,22,50,80)));
 		StdDraw.filledCircle(100+(map(pitch,0,22,50,80))*Math.cos(pitch*10), 100+(map(pitch,0,22,50,80))*Math.sin(pitch*10), 10);
 		StdDraw.setPenRadius(.01);
-		StdDraw.line(100+(map(pitch,0,22,50,80))*Math.cos(pitch*10)+9.5, 100+(map(pitch,0,22,50,80))*Math.sin(pitch*10), 100+(map(pitch,0,22,50,80))*Math.cos(pitch*10)+9.5, 100+(map(pitch,0,22,50,80))*Math.sin(pitch*10)+30);
+		StdDraw.line(100+(map(pitch,0,22,50,80))*Math.cos(pitch*10)+8.5, 100+(map(pitch,0,22,50,80))*Math.sin(pitch*10), 100+(map(pitch,0,22,50,80))*Math.cos(pitch*10)+9.5, 100+(map(pitch,0,22,50,80))*Math.sin(pitch*10)+30);
 		StdDraw.setPenRadius(.002);
 		if (Math.cos(pitch*10)>=0 && Math.sin(pitch*10)>=0) StdDraw.picture(100, 100, "tigerstandright.png");
 		else if(Math.cos(pitch*10)<=0 && Math.sin(pitch*10)>=0) StdDraw.picture(100, 100, "tigerstandleft.png");
@@ -306,6 +327,38 @@ public class NameThatTune1 {
 	}
 
 	/**
+	 * This method returns all the y-coordinates of the notes in a trill
+	 * @param a This is the pitch of the original note
+	 * @param base This is the basePitch of the original note
+	 * @param ints This is the baseQuality of the original note
+	 * @param t This is the duration of the original note
+	 * @return
+	 */
+	public static double[] saveTrill(int a, int base, short[] ints, double t){
+		int cnt=0;
+		int length=(int)(t*StdAudio.SAMPLE_RATE);
+		double notes[]=new double[length+6];
+		double trill = 1.0/16;
+		double[] originalNote = note(a,base, ints, trill, 1);
+		double[] trillNote = note(a+1,base, ints, trill, 1);
+		for(int i = 0; i < (t/MusicTestNew.time)*4;i++) {
+			if(i % 2 == 0){
+				for(int z=0;z<StdAudio.SAMPLE_RATE*trill;z++){
+					notes[cnt]=originalNote[z];
+					cnt+=1;
+				}
+			}
+			else{
+				for(int z=0;z<StdAudio.SAMPLE_RATE*trill;z++){
+					notes[cnt]=trillNote[z];
+					cnt+=1;
+				}
+			}
+		}
+		return notes;
+	}
+
+	/**
 	 * This method takes the weighted average of the sum of two arrays
 	 * @param a This is the first array
 	 * @param b This is the second array
@@ -326,7 +379,7 @@ public class NameThatTune1 {
 	} 
 
 	/**
-	 * This method is used to create a pure tone of the given frequency for the given duration
+	 * This method is used to translate the given note into a wave
 	 * @param hz This is the frequency of the note
 	 * @param duration This is the duration of the note
 	 * @return double[] This returns an array of y-values of the wave of the sound
@@ -376,7 +429,7 @@ public class NameThatTune1 {
 	 * @param pitch This is the pitch of the desired note
 	 * @param base This is the base note of the chord
 	 * @param t This is the duration of the note
-	 * @return double[] This returns the note and major chord that goes with it
+	 * @return double[] This returns the major chord that goes with the note
 	 */
 	public static double[] majorChord(int pitch,int base, double t) {
 		double hz1 = 440.0 * Math.pow(2, pitch / 12.0);
@@ -419,7 +472,7 @@ public class NameThatTune1 {
 	 * @param pitch This is the pitch of the desired note
 	 * @param base This is the base note of the chord
 	 * @param t This is the duration of the note
-	 * @return double[] This returns the note and minor chord that goes with it
+	 * @return double[] This returns minor chord that goes with the note
 	 */
 	public static double[] minorChord(int pitch,int base, double t) {
 		double hz1 = 440.0 * Math.pow(2, pitch / 12.0);
@@ -547,7 +600,6 @@ public class NameThatTune1 {
 		for (int z=0; z<pitch.length;z++){
 			short baseQuality[]=chordIntervals(ints[z]);
 			double[] b = note(pitch[z],basePitch[z],baseQuality, duration[z], 1);
-			//double[] b = note(pitch[z], duration[z]);
 			for(int y=0; y<StdAudio.SAMPLE_RATE*duration[z];y++){
 				if (z==0){
 					new1[length-(int)(StdAudio.SAMPLE_RATE*duration[0])+count-1]=0;
