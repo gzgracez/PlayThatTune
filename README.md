@@ -7,3 +7,6 @@ Play That Tune
 
 ---
 ![PlayThatTune](/pic.png)
+_Play That Tune_
+![PlayThatTuneGIF](/ptt.gif)
+_Displaying randomly generated music_
