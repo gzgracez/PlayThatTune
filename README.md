@@ -6,5 +6,5 @@ Play That Tune
 * The randomly generated song (including the randomly generated trills) is then saved to a .wav file for future enjoyment!
 
 ---
-![PlayThatTuneGIF](/ptt.gif)
+![PlayThatTuneGIF](/pttLarge.gif)
 _Displaying randomly generated music_
